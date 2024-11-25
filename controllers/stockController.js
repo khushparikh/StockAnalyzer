@@ -159,3 +159,16 @@ exports.analyzePortfolio = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
+
+// Clear all stocks
+exports.clearStocks = async (req, res) => {
+  try {
+    await Stock.destroy({
+      where: {},
+      truncate: true
+    });
+    res.json({ message: 'All stocks have been cleared from the database' });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
