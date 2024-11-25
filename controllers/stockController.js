@@ -66,3 +66,49 @@ exports.getStockDetails = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
+
+// Analyze portfolio
+exports.analyzePortfolio = async (req, res) => {
+  try {
+    const stocks = await Stock.findAll();
+    
+    let totalValue = 0;
+    let totalInvestment = 0;
+    const stocksWithCurrentValue = [];
+
+    for (const stock of stocks) {
+      const stockDetails = await fetchStockDetails(stock.symbol);
+      await stock.update({
+        currentPrice: stockDetails.currentPrice,
+        name: stockDetails.name,
+        industry: stockDetails.industry,
+        lastUpdated: new Date()
+      });
+
+      const currentValue = stock.quantity * stockDetails.currentPrice;
+      const investmentValue = stock.quantity * stock.purchasePrice;
+      
+      totalValue += currentValue;
+      totalInvestment += investmentValue;
+
+      stocksWithCurrentValue.push({
+        ...stock.toJSON(),
+        currentValue,
+        profitLoss: currentValue - investmentValue,
+        profitLossPercentage: ((currentValue - investmentValue) / investmentValue) * 100
+      });
+    }
+
+    res.json({
+      stocks: stocksWithCurrentValue,
+      summary: {
+        totalValue,
+        totalInvestment,
+        totalProfitLoss: totalValue - totalInvestment,
+        totalProfitLossPercentage: ((totalValue - totalInvestment) / totalInvestment) * 100
+      }
+    });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};

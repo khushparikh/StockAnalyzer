@@ -11,5 +11,10 @@ router.post('/add', stockController.addStock);
 // Get individual stock details
 router.get('/:id', stockController.getStockDetails);
 
+// Analyze portfolio
+router.get('/analyze/portfolio', stockController.analyzePortfolio);
+
+// Clear all stocks
+router.delete('/clear', stockController.clearStocks);
 
 module.exports = router;
