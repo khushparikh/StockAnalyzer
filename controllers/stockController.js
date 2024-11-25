@@ -2,6 +2,53 @@ const Stock = require('../models/Stock');
 const axios = require('axios');
 const { Configuration, OpenAIApi } = require('openai');
 
+// Configure OpenAI
+const configuration = new Configuration({
+  apiKey: process.env.OPENAI_API_KEY,
+});
+const openai = new OpenAIApi(configuration);
+
+// Fetch stock details from Finnhub
+async function fetchStockDetails(symbol) {
+  try {
+    const [quoteResponse, profileResponse] = await Promise.all([
+      axios.get(`https://finnhub.io/api/v1/quote?symbol=${symbol}&token=${process.env.FINNHUB_API_KEY}`),
+      axios.get(`https://finnhub.io/api/v1/stock/profile2?symbol=${symbol}&token=${process.env.FINNHUB_API_KEY}`)
+    ]);
+    
+    return {
+      currentPrice: quoteResponse.data.c,
+      name: profileResponse.data.name,
+      industry: profileResponse.data.finnhubIndustry
+    };
+  } catch (error) {
+    console.error('Error fetching stock details:', error);
+    throw new Error(`Could not fetch details for ${symbol}`);
+  }
+}
+
+// Generate AI Stock Advice
+async function generateStockAdvice(stockSymbol) {
+  try {
+    const response = await openai.createChatCompletion({
+      model: "gpt-3.5-turbo",
+      messages: [
+        {
+          role: "system", 
+          content: "You are a financial advisor providing stock analysis."
+        },
+        {
+          role: "user",
+          content: `Provide a brief analysis and recommendation for ${stockSymbol} stock.`
+        }
+      ]
+    });
+    return response.data.choices[0].message.content;
+  } catch (error) {
+    console.error('Error generating stock advice:', error);
+    return 'Unable to generate stock advice at this time.';
+  }
+}
 
 // Get all stocks in portfolio
 exports.getAllStocks = async (req, res) => {
