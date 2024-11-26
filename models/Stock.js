@@ -1,5 +1,6 @@
 const { DataTypes } = require('sequelize');
 const { sequelize } = require('../config/database');
+const User = require('./User');
 
 const Stock = sequelize.define('Stock', {
   symbol: {
@@ -43,5 +44,9 @@ const Stock = sequelize.define('Stock', {
 }, {
   timestamps: true
 });
+
+// Associate Stock with User
+Stock.belongsTo(User, { foreignKey: 'userId' });
+User.hasMany(Stock, { foreignKey: 'userId' });
 
 module.exports = Stock;
