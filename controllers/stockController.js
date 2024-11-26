@@ -53,7 +53,8 @@ async function generateStockAdvice(stockSymbol) {
 // Get all stocks in portfolio
 exports.getAllStocks = async (req, res) => {
   try {
-    const stocks = await Stock.findAll();
+    const userId = req.user.id; // Assuming authentication middleware sets req.user
+    const stocks = await Stock.findAll({ where: { userId } });
     res.json(stocks);
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -64,10 +65,10 @@ exports.getAllStocks = async (req, res) => {
 exports.addStock = async (req, res) => {
   try {
     const { symbol, quantity } = req.body;
-    
-    // Get stock details including current price and company name
+    const userId = req.user.id; // Assuming authentication middleware sets req.user
+
     const stockDetails = await fetchStockDetails(symbol);
-    
+
     const stock = await Stock.create({
       symbol: symbol.toUpperCase(),
       name: stockDetails.name,
@@ -75,9 +76,10 @@ exports.addStock = async (req, res) => {
       purchasePrice: stockDetails.currentPrice,
       currentPrice: stockDetails.currentPrice,
       industry: stockDetails.industry,
-      lastUpdated: new Date()
+      lastUpdated: new Date(),
+      userId
     });
-    
+
     res.status(201).json(stock);
   } catch (error) {
     res.status(400).json({ message: error.message });
