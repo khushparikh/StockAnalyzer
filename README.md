@@ -1,6 +1,3 @@
-<<<<<<< HEAD
-# StockAnalyzer
-=======
 # Stock Portfolio Tracker
 
 A Node.js application for tracking and analyzing your stock portfolio with real-time prices and AI-powered insights.
@@ -192,6 +189,30 @@ When an error occurs, the response will look like this:
   "message": "Error description here"
 }
 ```
+
+## Database Schema
+
+The application uses SQLite with Sequelize ORM. Here's the database schema for the Stock model:
+
+### Stock Model
+
+| Field         | Type    | Description                          | Constraints                    |
+|--------------|---------|--------------------------------------|--------------------------------|
+| symbol       | STRING  | Stock ticker symbol                  | Required, Automatically uppercase |
+| name         | STRING  | Company name                         | Optional                       |
+| quantity     | INTEGER | Number of shares owned               | Required, Must be non-negative |
+| purchasePrice| FLOAT   | Price per share at purchase          | Optional                       |
+| currentPrice | FLOAT   | Current market price per share       | Optional                       |
+| lastUpdated  | DATE    | Timestamp of last price update       | Defaults to current time      |
+| industry     | STRING  | Industry sector of the company       | Optional, Defaults to empty   |
+| createdAt    | DATE    | Record creation timestamp            | Automatically managed         |
+| updatedAt    | DATE    | Record last update timestamp         | Automatically managed         |
+
+The schema is designed to:
+- Track essential stock information (symbol, name, industry)
+- Manage portfolio details (quantity, purchase price)
+- Monitor current market data (current price, last update time)
+- Include audit fields (created and updated timestamps)
 
 ## Technologies
 - Express.js - Web framework
