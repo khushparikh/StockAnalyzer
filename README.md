@@ -59,7 +59,7 @@ cp .env.example .env
 
 4. Update the `.env` file with your credentials:
 ```env
-PORT=3000
+PORT=5001
 FINNHUB_API_KEY=your_finnhub_api_key
 OPENAI_API_KEY=your_openai_api_key
 JWT_SECRET=your_jwt_secret
@@ -99,7 +99,7 @@ Example Response:
 
 #### Login
 ```bash
-curl -X POST http://localhost:3000/api/users/login \
+curl -X POST http://localhost:5001/api/users/login \
   -H "Content-Type: application/json" \
   -d '{
     "email": "test@example.com",
@@ -120,7 +120,7 @@ All stock endpoints require authentication. Replace `<token>` with your JWT toke
 
 #### Get All Stocks in Portfolio
 ```bash
-curl -X GET http://localhost:3000/api/stocks \
+curl -X GET http://localhost:5001/api/stocks \
   -H "Authorization: Bearer <token>"
 ```
 
@@ -142,7 +142,7 @@ Example Response:
 
 #### Add a Stock
 ```bash
-curl -X POST http://localhost:3000/api/stocks/add \
+curl -X POST http://localhost:5001/api/stocks/add \
   -H "Content-Type: application/json" \
   -H "Authorization: Bearer <token>" \
   -d '{
@@ -168,7 +168,7 @@ Example Response:
 
 #### Get Stock Details
 ```bash
-curl -X GET http://localhost:3000/api/stocks/1 \
+curl -X GET http://localhost:5001/api/stocks/1 \
   -H "Authorization: Bearer <token>"
 ```
 
@@ -192,7 +192,7 @@ Example Response:
 
 #### Analyze Portfolio
 ```bash
-curl -X GET http://localhost:3000/api/stocks/analyze/portfolio \
+curl -X GET http://localhost:5001/api/stocks/analyze/portfolio \
   -H "Authorization: Bearer <token>"
 ```
 
@@ -221,7 +221,7 @@ Example Response:
 
 #### Clear Portfolio
 ```bash
-curl -X DELETE http://localhost:3000/api/stocks/clear \
+curl -X DELETE http://localhost:5001/api/stocks/clear \
   -H "Authorization: Bearer <token>"
 ```
 
@@ -246,7 +246,7 @@ Here's a step-by-step guide to test all endpoints with curl commands and expecte
 
 ### 1. Register a New User
 ```bash
-curl -X POST http://localhost:3000/api/users/register \
+curl -X POST http://localhost:5001/api/users/register \
   -H "Content-Type: application/json" \
   -d '{
     "username": "testuser",
@@ -264,7 +264,7 @@ Response:
 
 ### 2. Login
 ```bash
-curl -X POST http://localhost:3000/api/users/login \
+curl -X POST http://localhost:5001/api/users/login \
   -H "Content-Type: application/json" \
   -d '{
     "email": "test@example.com",
@@ -282,7 +282,7 @@ Response:
 ### 3. Add First Stock (AAPL)
 ```bash
 # Replace <token> with the JWT token received from login
-curl -X POST http://localhost:3000/api/stocks/add \
+curl -X POST http://localhost:5001/api/stocks/add \
   -H "Content-Type: application/json" \
   -H "Authorization: Bearer <token>" \
   -d '{
@@ -307,7 +307,7 @@ Response:
 
 ### 4. Add Second Stock (MSFT)
 ```bash
-curl -X POST http://localhost:3000/api/stocks/add \
+curl -X POST http://localhost:5001/api/stocks/add \
   -H "Content-Type: application/json" \
   -H "Authorization: Bearer <token>" \
   -d '{
@@ -332,7 +332,7 @@ Response:
 
 ### 5. Get All Stocks
 ```bash
-curl -X GET http://localhost:3000/api/stocks \
+curl -X GET http://localhost:5001/api/stocks \
   -H "Authorization: Bearer <token>"
 ```
 Response:
@@ -363,7 +363,7 @@ Response:
 
 ### 6. Get Single Stock Details
 ```bash
-curl -X GET http://localhost:3000/api/stocks/1 \
+curl -X GET http://localhost:5001/api/stocks/1 \
   -H "Authorization: Bearer <token>"
 ```
 Response:
@@ -386,7 +386,7 @@ Response:
 
 ### 7. Analyze Portfolio
 ```bash
-curl -X GET http://localhost:3000/api/stocks/analyze/portfolio \
+curl -X GET http://localhost:5001/api/stocks/analyze/portfolio \
   -H "Authorization: Bearer <token>"
 ```
 Response:
@@ -427,7 +427,7 @@ Response:
 
 ### 8. Clear Portfolio
 ```bash
-curl -X DELETE http://localhost:3000/api/stocks/clear \
+curl -X DELETE http://localhost:5001/api/stocks/clear \
   -H "Authorization: Bearer <token>"
 ```
 Response:
@@ -439,7 +439,7 @@ Response:
 
 ### 9. Verify Empty Portfolio
 ```bash
-curl -X GET http://localhost:3000/api/stocks \
+curl -X GET http://localhost:5001/api/stocks \
   -H "Authorization: Bearer <token>"
 ```
 Response:
