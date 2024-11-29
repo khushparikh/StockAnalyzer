@@ -15,12 +15,36 @@ A Node.js application for tracking and analyzing your stock portfolio with real-
 - Finnhub API Key (get it from [Finnhub](https://finnhub.io))
 - OpenAI API Key (get it from [OpenAI Platform](https://platform.openai.com))
 
-## Setup Instructions
+## Project Structure
+```
+stock-portfolio-tracker/
+├── backend/
+│   ├── config/
+│   │   └── database.js
+│   ├── controllers/
+│   │   ├── stockController.js
+│   │   └── userController.js
+│   ├── middleware/
+│   │   └── auth.js
+│   ├── models/
+│   │   ├── Stock.js
+│   │   └── User.js
+│   ├── routes/
+│   │   ├── stockRoutes.js
+│   │   └── userRoutes.js
+│   ├── server.js
+│   ├── package.json
+│   ├── package-lock.json
+│   ├── .env
+│   └── .env.example
+└── README.md
+```
 
-1. Clone the repository:
+## Getting Started
+
+1. Navigate to the backend directory:
 ```bash
-git clone https://github.com/yourusername/stock-portfolio-tracker.git
-cd stock-portfolio-tracker
+cd backend
 ```
 
 2. Install dependencies:
@@ -28,26 +52,27 @@ cd stock-portfolio-tracker
 npm install
 ```
 
-3. Create a `.env` file in the root directory (copy from .env.example):
+3. Create a `.env` file in the backend directory:
 ```bash
+cp .env.example .env
+```
+
+4. Update the `.env` file with your credentials:
+```env
 PORT=3000
 FINNHUB_API_KEY=your_finnhub_api_key
 OPENAI_API_KEY=your_openai_api_key
-JWT_SECRET=your_jwt_secret_key
+JWT_SECRET=your_jwt_secret
 DB_NAME=stock_portfolio
-DB_USER=root
-DB_PASSWORD=
+DB_USER=your_db_user
+DB_PASSWORD=your_db_password
 DB_HOST=localhost
 ```
 
-4. Start the server:
+5. Start the development server:
 ```bash
-npm run dev  # Development with auto-reload
-# or
-npm start    # Production
+npm run dev
 ```
-
-The server will start on port 3000 (or your specified port in .env). The SQLite database will be automatically created and initialized.
 
 ## API Documentation
 
