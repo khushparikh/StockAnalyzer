@@ -17,7 +17,29 @@ const Home = () => {
     const [accessToken, setAccessToken] = useState('')
     
     
-
+    const HandleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+        e.preventDefault();
+        console.log("clicked")
+        fetch('http://127.0.0.1:5002/login', {
+            method: 'POST',
+            body: JSON.stringify({
+                "email": email,
+                "password": password,
+            }),
+            headers: {
+                'Content-type': 'application/json; charset=UTF-8',
+            },
+        })
+         .then((res) => res.json())
+         .then((access_token) => {
+            setAccessToken(access_token);
+            setPassword('');
+            setEmail('');
+         })
+         .catch((err) => {
+            console.log(err.message);
+         });
+   };
     
     
     
