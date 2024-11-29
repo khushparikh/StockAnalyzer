@@ -63,13 +63,15 @@ const Home = () => {
             onChange={(e) => {
                 setConfirmPassword(e.target.value);
             }}
-            className="w-full px-4 py-2 mb-6 text-gray-900 rounded-md border border-gray-300 focus:ring-2 focus:ring-sky-500 focus:outline-none"
+            className="w-full px-4 py-2 mb-3 text-gray-900 rounded-md border border-gray-300 focus:ring-2 focus:ring-sky-500 focus:outline-none"
             placeholder="Confirm your password"
             />
             
-            <div>
-            {passwordMatch && <p className= "text-red-500">Passwords do not match</p>}
-            </div>
+            {passwordMatch && (
+                <p className="text-red-500 text-base mt-1 mb-6">
+                    Passwords do not match.
+                </p>
+        )}
 
 
             {/* SIGNUP */}
