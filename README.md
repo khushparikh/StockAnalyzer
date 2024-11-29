@@ -80,7 +80,7 @@ npm run dev
 
 #### Register a New User
 ```bash
-curl -X POST http://localhost:3000/api/users/register \
+curl -X POST http://localhost:5001/api/users/register \
   -H "Content-Type: application/json" \
   -d '{
     "username": "testuser",
