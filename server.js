@@ -1,20 +1,19 @@
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
-const { connectDB } = require('./config/database');
+const { sequelize } = require('./config/database');
+const stockRoutes = require('./routes/stockRoutes');
+const userRoutes = require('./routes/userRoutes');
 
 const app = express();
-const PORT = process.env.PORT || 5001;
-
-// Connect to Database
-connectDB();
+const PORT = process.env.PORT || 3000;
 
 // Middleware
 app.use(cors());
 app.use(express.json());
 
 // Routes
-const stockRoutes = require('./routes/stockRoutes');
+app.use('/api/users', userRoutes);
 app.use('/api/stocks', stockRoutes);
 
 // Error Handling Middleware
@@ -23,7 +22,13 @@ app.use((err, req, res, next) => {
   res.status(500).send('Something broke!');
 });
 
-// Start Server
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-});
+// Sync database and start server
+sequelize.sync({ force: true }) // This will recreate all tables
+  .then(() => {
+    app.listen(PORT, () => {
+      console.log(`Server running on port ${PORT}`);
+    });
+  })
+  .catch(err => {
+    console.error('Database connection failed:', err);
+  });

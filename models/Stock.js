@@ -1,8 +1,15 @@
 const { DataTypes } = require('sequelize');
 const { sequelize } = require('../config/database');
-const User = require('./User');
 
 const Stock = sequelize.define('Stock', {
+  userId: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+    references: {
+      model: 'Users',
+      key: 'id'
+    }
+  },
   symbol: {
     type: DataTypes.STRING,
     allowNull: false,
@@ -20,33 +27,29 @@ const Stock = sequelize.define('Stock', {
   quantity: {
     type: DataTypes.INTEGER,
     allowNull: false,
+    defaultValue: 0,
     validate: {
       min: 0
     }
   },
-  purchasePrice: {
-    type: DataTypes.FLOAT,
-    allowNull: true
-  },
-  currentPrice: {
-    type: DataTypes.FLOAT,
-    allowNull: true
-  },
-  lastUpdated: {
-    type: DataTypes.DATE,
-    defaultValue: DataTypes.NOW
-  },
-  industry: {
-    type: DataTypes.STRING,
-    allowNull: true,
-    defaultValue: ''
+  averagePrice: {
+    type: DataTypes.DECIMAL(10, 2),
+    allowNull: false,
+    defaultValue: 0.00,
+    validate: {
+      min: 0
+    }
   }
 }, {
   timestamps: true
 });
 
-// Associate Stock with User
-Stock.belongsTo(User, { foreignKey: 'userId' });
-User.hasMany(Stock, { foreignKey: 'userId' });
+// Define the relationship with User model
+Stock.associate = (models) => {
+  Stock.belongsTo(models.User, {
+    foreignKey: 'userId',
+    as: 'user'
+  });
+};
 
 module.exports = Stock;

@@ -14,9 +14,21 @@ const User = sequelize.define('User', {
     validate: {
       isEmail: true
     }
+  },
+  password: {
+    type: DataTypes.STRING,
+    allowNull: false
   }
 }, {
   timestamps: true
 });
+
+// Define the relationship with Stock model
+User.associate = (models) => {
+  User.hasMany(models.Stock, {
+    foreignKey: 'userId',
+    as: 'portfolio'
+  });
+};
 
 module.exports = User;
