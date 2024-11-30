@@ -1,18 +1,56 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 
 const Home = () => {
-    
-    const [name, setName] = useState("");
+    const router = useRouter();
+
+    const [username, setUsername] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
+    const [access_token, setAccessToken] = useState("");
 
     const passwordMatch = password !== "" && confirmPassword !== "" && password !== confirmPassword;
 
     const handleSignUp = (e: React.MouseEvent<HTMLButtonElement>) => {
-        return;
+        e.preventDefault();
+
+        fetch('http://127.0.0.1:5001/api/users/register', {
+            method: 'POST',
+            body: JSON.stringify({
+                "username": username,
+                "email": email,
+                "password": password,
+            }),
+            headers: {
+                'Content-type': 'application/json; charset=UTF-8',
+            },
+        })
+         .then((res) => {   
+            if (!res.ok) {
+                if (res.status === 400)
+                {
+                    throw new Error('User already exists: ' + res.statusText);
+                }
+                throw new Error('Creation failed: ' + res.statusText);
+            }
+            return res.json();
+        })
+         .then((data) => {
+            console.log(data)
+            const access_token = data.token;
+            setAccessToken(access_token);
+            setPassword('');
+            setEmail('');
+            console.log('Creation successful, token:', access_token); // REMOVE LATER
+            router.push('/login') // RE ROUTE TO NEXT PAGE --> Login --> Full portfolio
+         })
+         .catch((err) => {
+            console.log(err.message);
+            alert('Creation failed. Please try again.');
+         });
     }
     
     return (
@@ -21,15 +59,15 @@ const Home = () => {
         <div className="w-full max-w-md p-6 bg-gray-800 rounded-lg shadow-lg">
             <h1 className="text-3xl font-bold text-white text-center mb-6">SIGN UP</h1>
             
-            {/* NAME */}
-            <label htmlFor="name" className="block text-md font-semibold text-gray-200 mb-2">Name</label>
+            {/* USERNAME */}
+            <label htmlFor="username" className="block text-md font-semibold text-gray-200 mb-2">Username</label>
             <input
-            id="name"
+            id="username"
             type="text"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
             className="w-full px-4 py-2 mb-4 text-gray-900 rounded-md border border-gray-300 focus:ring-2 focus:ring-sky-500 focus:outline-none"
-            placeholder="Enter your name"
+            placeholder="Enter your username"
             />
             
             {/* EMAIL */}

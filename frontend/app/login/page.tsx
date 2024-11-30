@@ -34,12 +34,15 @@ const Home = () => {
         })
          .then((res) => {   
             if (!res.ok) {
+                if (res.status === 401)
+                {
+                    throw new Error('Invalid credentials: ' + res.statusText);
+                }
                 throw new Error('Login failed: ' + res.statusText);
             }
             return res.json();
         })
          .then((data) => {
-            console.log(data)
             const access_token = data.token;
             setAccessToken(access_token);
             setPassword('');
