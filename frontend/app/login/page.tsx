@@ -2,6 +2,7 @@
 
 import { userAgentFromString } from "next/server";
 import { useEffect, useState } from "react";
+import { useRouter } from 'next/navigation';
 
 interface PostData {
     email: string;
@@ -11,7 +12,8 @@ interface PostData {
 
 
 const Home = () => {
-    
+    const router = useRouter();
+
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [accessToken, setAccessToken] = useState('')
@@ -19,8 +21,8 @@ const Home = () => {
     
     const HandleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
-        console.log("clicked")
-        fetch('http://127.0.0.1:5002/login', {
+
+        fetch('http://127.0.0.1:5001/api/users/login', {
             method: 'POST',
             body: JSON.stringify({
                 "email": email,
@@ -30,14 +32,24 @@ const Home = () => {
                 'Content-type': 'application/json; charset=UTF-8',
             },
         })
-         .then((res) => res.json())
-         .then((access_token) => {
+         .then((res) => {   
+            if (!res.ok) {
+                throw new Error('Login failed: ' + res.statusText);
+            }
+            return res.json();
+        })
+         .then((data) => {
+            console.log(data)
+            const access_token = data.token;
             setAccessToken(access_token);
             setPassword('');
             setEmail('');
+            console.log('Login successful, token:', access_token); // REMOVE LATER
+            router.push('/') // RE ROUTE TO NEXT PAGE --> Full portfolio
          })
          .catch((err) => {
             console.log(err.message);
+            alert('Login failed. Please try again.');
          });
    };
     
@@ -75,9 +87,7 @@ const Home = () => {
                 type="submit"
                 onClick={(e) => HandleClick(e)}
                 className="w-full py-3 text-white font-semibold bg-sky-500 hover:bg-sky-600 rounded-md shadow-md focus:outline-none focus:ring-2 focus:ring-sky-400 transition duration-300"
-                >
-                Login
-                </button>
+                >Login</button>
                 
                 {/* SIGNUP */}
                 <p className="mt-6 text-center text-gray-400">
