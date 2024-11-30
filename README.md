@@ -69,10 +69,28 @@ DB_PASSWORD=your_db_password
 DB_HOST=localhost
 ```
 
-5. Start the development server:
+5. Start the backend development server:
 ```bash
 npm run dev
 ```
+
+6. Open a new terminal, separate from the one running the backend development server
+
+7. Navigate to the frontend directory
+```bash
+cd frontend
+```
+
+8. Install dependencies:
+```bash
+npm install
+```
+
+9. Start the backend development server:
+```bash
+npm run dev
+```
+
 
 ## API Documentation
 
