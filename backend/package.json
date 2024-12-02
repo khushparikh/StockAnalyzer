@@ -23,7 +23,8 @@
     "jsonwebtoken": "^9.0.2",
     "openai": "^4.73.1",
     "sequelize": "^6.35.1",
-    "sqlite3": "^5.1.6"
+    "sqlite3": "^5.1.6",
+    "stock-portfolio-tracker": "file:"
   },
   "devDependencies": {
     "nodemon": "^3.1.7"
