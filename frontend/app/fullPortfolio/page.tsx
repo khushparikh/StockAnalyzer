@@ -61,6 +61,7 @@ const PortfolioPage = () => {
 }, []);
 
 return (
+
   <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-700 text-white px-6 py-8">
     
     
@@ -69,6 +70,7 @@ return (
       <h1 className="text-4xl font-extrabold tracking-wide">Full Portfolio</h1>
       <p className="text-lg text-gray-300 mt-2">Track and manage your investments effortlessly.</p>
     </div>
+
 
     {/* Search and Add Button */}
     <div className="flex justify-between items-center mt-10 max-w-4xl mx-auto">
@@ -108,7 +110,9 @@ return (
 
     {/* Error Message */}
     {error && <p className="text-red-400 text-center mt-6">{error}</p>}
+    
   </div>
+
 );
 };
 
