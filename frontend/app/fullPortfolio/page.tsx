@@ -61,80 +61,54 @@ const PortfolioPage = () => {
 }, []);
 
 return (
+  <div className="min-h-screen bg-gradient-to-br from-blue-500 via-blue-600 to-blue-800 text-white px-6 py-8">
+    {/* Header */}
+    <div className="text-center">
+      <h1 className="text-4xl font-extrabold tracking-wide">Full Portfolio</h1>
+      <p className="text-lg text-gray-200 mt-2">Track and manage your investments effortlessly.</p>
+    </div>
 
-  <div className="min-h-screen bg-black text-white flex flex-col items-center">
-      
-      {/* Header */}
-      <h1 className="text-4xl font-bold mt-6">Full Portfolio</h1>
-
-      {/* Stock Table */}
-      <div className="w-full max-w-4xl mt-8">
-        <div className="grid grid-cols-3 text-center font-semibold mb-4">
-          <span>Stock</span>
-          <span>Price</span>
-          <span>Total</span>
-        </div>
-        {stock.map((stock, index) => (
-          <div
-            key={index}
-            className="grid grid-cols-3 text-center py-2 bg-blue-500 rounded-lg mb-2"
-          >
-            <span>{stock.symbol}</span>
-            <span>${stock.averagePrice.toFixed(2)}</span>
-            <span>{stock.quantity}</span>
-          </div>
-        ))}
-      </div>
-
-      {/* Search Bar */}
-      <div className="mt-6">
-        <input
-          type="text"
-          placeholder="Search SYMBOL"
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          className="px-4 py-2 rounded-lg text-black"
-        />
-      </div>
-
-      {/* Add Stock Button */}
+    {/* Search and Add Button */}
+    <div className="flex justify-between items-center mt-10 max-w-4xl mx-auto">
+      <input
+        type="text"
+        placeholder="Search SYMBOL"
+        value={search}
+        onChange={(e) => setSearch(e.target.value)}
+        className="flex-1 px-4 py-3 rounded-lg text-black shadow-md focus:outline-none focus:ring-2 focus:ring-blue-400"
+      />
       <button
         onClick={handleAddStock}
-        className="mt-4 px-6 py-2 bg-blue-700 rounded-lg hover:bg-blue-600"
+        className="ml-4 px-6 py-3 bg-blue-700 text-white font-semibold rounded-lg shadow-md hover:bg-blue-600 transition-all"
       >
         Add Stock
       </button>
     </div>
-  );
+
+    {/* Stock Cards */}
+    <div className="grid gap-6 mt-12 max-w-4xl mx-auto">
+      {stock.map((stock, index) => (
+        <div
+          key={index}
+          className="flex justify-between items-center bg-blue-600 p-6 rounded-lg shadow-lg transition-transform hover:scale-105"
+        >
+          <div>
+            <h2 className="text-2xl font-bold">{stock.symbol}</h2>
+            <p className="text-gray-300 text-sm">{stock.description}</p>
+          </div>
+          <div className="text-right">
+            <p className="text-lg font-semibold">Price: ${stock.averagePrice.toFixed(2)}</p>
+            <p className="text-sm text-gray-300">Quantity: {stock.quantity}</p>
+          </div>
+        </div>
+      ))}
+    </div>
+
+    {/* Error Message */}
+    {error && <p className="text-red-400 text-center mt-6">{error}</p>}
+  </div>
+);
 };
 
 export default PortfolioPage;
-  
-  
-  
-  
-  
-  
-  
-  
-  /* <div>
-    {stock.map((stock, index) => (
-      <div key={index} className="flex  mx-4 my-4 text-black font-bold text-lg">
-        <p className="mx-4">{stock.symbol}</p>
-        <p className="mx-4">{stock.averagePrice}</p>
-        <p className="mx-4">{stock.quantity}</p>
-    
-      </div>
-    ))}
-
-
-
-  <button onClick={(e) => handleAddStock(e)}>
-    Add Stock
-  </button>
-
-
-  </div>
-*/
-
 
