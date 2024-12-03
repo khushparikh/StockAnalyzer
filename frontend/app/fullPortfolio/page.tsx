@@ -61,11 +61,13 @@ const PortfolioPage = () => {
 }, []);
 
 return (
-  <div className="min-h-screen bg-gradient-to-br from-blue-500 via-blue-600 to-blue-800 text-white px-6 py-8">
+  <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-700 text-white px-6 py-8">
+    
+    
     {/* Header */}
     <div className="text-center">
       <h1 className="text-4xl font-extrabold tracking-wide">Full Portfolio</h1>
-      <p className="text-lg text-gray-200 mt-2">Track and manage your investments effortlessly.</p>
+      <p className="text-lg text-gray-300 mt-2">Track and manage your investments effortlessly.</p>
     </div>
 
     {/* Search and Add Button */}
@@ -75,11 +77,11 @@ return (
         placeholder="Search SYMBOL"
         value={search}
         onChange={(e) => setSearch(e.target.value)}
-        className="flex-1 px-4 py-3 rounded-lg text-black shadow-md focus:outline-none focus:ring-2 focus:ring-blue-400"
+        className="flex-1 px-4 py-3 rounded-lg text-black shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500"
       />
       <button
         onClick={handleAddStock}
-        className="ml-4 px-6 py-3 bg-blue-700 text-white font-semibold rounded-lg shadow-md hover:bg-blue-600 transition-all"
+        className="ml-4 px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-500 transition-all"
       >
         Add Stock
       </button>
@@ -90,15 +92,15 @@ return (
       {stock.map((stock, index) => (
         <div
           key={index}
-          className="flex justify-between items-center bg-blue-600 p-6 rounded-lg shadow-lg transition-transform hover:scale-105"
+          className="flex justify-between items-center bg-gray-800 p-6 rounded-lg shadow-lg transition-transform hover:scale-105"
         >
           <div>
             <h2 className="text-2xl font-bold">{stock.symbol}</h2>
-            <p className="text-gray-300 text-sm">{stock.description}</p>
+            <p className="text-gray-400 text-sm">{stock.description}</p>
           </div>
           <div className="text-right">
             <p className="text-lg font-semibold">Price: ${stock.averagePrice.toFixed(2)}</p>
-            <p className="text-sm text-gray-300">Quantity: {stock.quantity}</p>
+            <p className="text-sm text-gray-400">Quantity: {stock.quantity}</p>
           </div>
         </div>
       ))}
