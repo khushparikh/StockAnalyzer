@@ -14,3 +14,35 @@ interface Stock {
   quantity: number;
 }
 
+const PortfolioPage = () => {
+  const [stockData, setStockData] = useState<Stock[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [stock, setStock] = useState<Stock[]>([]);
+
+  const router = useRouter();
+
+  const handleAddStock = (e: React.MouseEvent<HTMLButtonElement>) => {
+    router.push('/addStock');
+  }
+
+  // Fetch stock data from the API
+  
+return (
+
+  <div>
+   {}
+
+
+<button onClick={(e) => handleAddStock(e)}>
+    Add Stock
+  </button>
+
+  </div>
+
+)
+
+}
+
+
+export default PortfolioPage;
