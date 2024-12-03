@@ -10,7 +10,7 @@ interface Stock {
   id: number;
   description: string;
   symbol: string;
-  price: number;
+  averagePrice: number;
   quantity: number;
 }
 
@@ -19,6 +19,8 @@ const PortfolioPage = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [stock, setStock] = useState<Stock[]>([]);
+  const [search, setSearch] = useState("");
+
 
   const router = useRouter();
 
@@ -58,30 +60,81 @@ const PortfolioPage = () => {
 
 }, []);
 
-
-  // Fetch stock data from the API
-  
 return (
 
-  <div>
+  <div className="min-h-screen bg-black text-white flex flex-col items-center">
+      
+      {/* Header */}
+      <h1 className="text-4xl font-bold mt-6">Full Portfolio</h1>
+
+      {/* Stock Table */}
+      <div className="w-full max-w-4xl mt-8">
+        <div className="grid grid-cols-3 text-center font-semibold mb-4">
+          <span>Stock</span>
+          <span>Price</span>
+          <span>Total</span>
+        </div>
+        {stock.map((stock, index) => (
+          <div
+            key={index}
+            className="grid grid-cols-3 text-center py-2 bg-blue-500 rounded-lg mb-2"
+          >
+            <span>{stock.symbol}</span>
+            <span>${stock.averagePrice.toFixed(2)}</span>
+            <span>{stock.quantity}</span>
+          </div>
+        ))}
+      </div>
+
+      {/* Search Bar */}
+      <div className="mt-6">
+        <input
+          type="text"
+          placeholder="Search SYMBOL"
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          className="px-4 py-2 rounded-lg text-black"
+        />
+      </div>
+
+      {/* Add Stock Button */}
+      <button
+        onClick={handleAddStock}
+        className="mt-4 px-6 py-2 bg-blue-700 rounded-lg hover:bg-blue-600"
+      >
+        Add Stock
+      </button>
+    </div>
+  );
+};
+
+export default PortfolioPage;
+  
+  
+  
+  
+  
+  
+  
+  
+  /* <div>
     {stock.map((stock, index) => (
-      <li key={index}>
-        {stock.symbol}
-      </li>
+      <div key={index} className="flex  mx-4 my-4 text-black font-bold text-lg">
+        <p className="mx-4">{stock.symbol}</p>
+        <p className="mx-4">{stock.averagePrice}</p>
+        <p className="mx-4">{stock.quantity}</p>
+    
+      </div>
+    ))}
 
-    ))
-}
 
 
-<button onClick={(e) => handleAddStock(e)}>
+  <button onClick={(e) => handleAddStock(e)}>
     Add Stock
   </button>
 
+
   </div>
-
-)
-
-}
+*/
 
 
-export default PortfolioPage;
