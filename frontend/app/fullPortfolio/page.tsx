@@ -20,6 +20,8 @@ const PortfolioPage = () => {
   const [error, setError] = useState<string | null>(null);
   const [stock, setStock] = useState<Stock[]>([]);
   const [search, setSearch] = useState("");
+  const [additionalSearch1, setAdditionalSearch1] = useState('');
+  const [additionalSearch2, setAdditionalSearch2] = useState('');
 
 
   const router = useRouter();
@@ -29,15 +31,17 @@ const PortfolioPage = () => {
   }
 
   useEffect(() => {
+
     const fetchStockData = async () => {
       fetch('http://127.0.0.1:5001/api/stocks', {
         method: 'GET',
         headers: {
             'Content-type': 'application/json; charset=UTF-8',
-            'Authorization': `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImlhdCI6MTczMzE5NjYwNiwiZXhwIjoxNzMzMjgzMDA2fQ.XUSqcvD-DHU7_R_Npo1p-P5CMSRwnsyajPxJ0abZ2Xw`,
+            'Authorization': `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImlhdCI6MTczMzI5MDY5MiwiZXhwIjoxNzMzMzc3MDkyfQ.pZpSSPRIUQdu8BH1bs1P8EvQBu0Zhi1HU3SMFYahjz4`,
         },
       })
-      .then((res) => {   
+      .then((res) => {
+        console.log(res)   
         if (!res.ok) {
             if (res.status === 401)
             {
@@ -61,16 +65,13 @@ const PortfolioPage = () => {
 }, []);
 
 return (
-
   <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-700 text-white px-6 py-8">
-    
     
     {/* Header */}
     <div className="text-center">
       <h1 className="text-4xl font-extrabold tracking-wide">Full Portfolio</h1>
       <p className="text-lg text-gray-300 mt-2">Track and manage your investments effortlessly.</p>
     </div>
-
 
     {/* Search and Add Button */}
     <div className="flex justify-between items-center mt-10 max-w-4xl mx-auto">
@@ -79,8 +80,8 @@ return (
         placeholder="Search SYMBOL"
         value={search}
         onChange={(e) => setSearch(e.target.value)}
-        className="flex-1 px-4 py-3 rounded-lg text-black shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-      />
+        className="w-full bg-transparent border-b-2 border-gray-500 text-white placeholder-gray-400 focus:outline-none focus:border-blue-400 pb-2 transition-colors duration-300"
+        />
       <button
         onClick={handleAddStock}
         className="ml-4 px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-500 transition-all"
@@ -108,13 +109,34 @@ return (
       ))}
     </div>
 
+    {/* Additional Search Bars */}
+    <div className="mt-6 max-w-4xl mx-auto space-x-4 flex justify-between items-center">
+    <input
+        type="text"
+        placeholder="Search Symbol"
+        value={additionalSearch1}
+        onChange={(e) => setAdditionalSearch1(e.target.value)}
+        className="w-full bg-transparent border-b-2 border-gray-500 text-white placeholder-gray-400 focus:outline-none focus:border-blue-400 pb-2 transition-colors duration-300"
+        />
+      <input
+        type="text"
+        placeholder="Select Quantity"
+        value={additionalSearch2}
+        onChange={(e) => setAdditionalSearch2(e.target.value)}
+        className="w-full bg-transparent border-b-2 border-gray-500 text-white placeholder-gray-400 focus:outline-none focus:border-blue-400 pb-2 transition-colors duration-300"
+        />
+      <button
+        className="px-6 py-3 bg-indigo-600 text-white font-semibold rounded-lg shadow-md hover:bg-indigo-500 transition-all"
+  >
+        Go To Stock
+      </button>
+    </div>
+
     {/* Error Message */}
     {error && <p className="text-red-400 text-center mt-6">{error}</p>}
-    
   </div>
-
 );
-};
+}
 
 export default PortfolioPage;
 
