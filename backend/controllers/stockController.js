@@ -1,10 +1,10 @@
 const Stock = require('../models/Stock');
 const axios = require('axios');
-const OpenAI = require('openai');
+const { Client } = require('anthropic');
 
-// Configure OpenAI
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
+// Initialize the Anthropic client
+const anthropicClient = new Client({
+  apiKey: process.env.ANTHROPIC_API_KEY, // Set your API key as an environment variable
 });
 
 // Fetch stock details from Finnhub
