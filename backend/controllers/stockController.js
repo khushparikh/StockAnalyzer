@@ -197,3 +197,38 @@ async function analyzeStockWithClaude(stockSymbol) {
     return 'Unable to generate stock analysis at this time.';
   }
 }
+
+// Function to analyze an entire portfolio with Claude
+async function analyzePortfolioWithClaude(stocks) {
+  try {
+    const portfolioSummary = stocks
+      .map(stock => `Stock: ${stock.symbol}, Quantity: ${stock.quantity}, Current Price: ${stock.currentPrice}`)
+      .join('\n');
+
+    const prompt = `
+      You are a financial advisor. Analyze the following portfolio:
+      ${portfolioSummary}
+      Provide insights on the portfolio's performance, risks, and areas of potential improvement.
+    `;
+
+    const response = await axios.post(
+      'https://api.anthropic.com/v1/completions',
+      {
+        model: 'claude-2',
+        prompt,
+        max_tokens_to_sample: 500
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${process.env.ANTHROPIC_API_KEY}`,
+          'Content-Type': 'application/json'
+        }
+      }
+    );
+
+    return response.data.completion.trim(); // Ensure we return the clean completion text
+  } catch (error) {
+    console.error('Error generating portfolio analysis with Claude:', error);
+    return 'Unable to generate portfolio analysis at this time.';
+  }
+}
