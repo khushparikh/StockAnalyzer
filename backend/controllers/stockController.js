@@ -176,22 +176,15 @@ exports.clearStocks = async (req, res) => {
 
 async function analyzeStockWithClaude(stockSymbol) {
   try {
-    const response = await axios.post(
-      'https://api.anthropic.com/v1/completions',
-      {
-        model: 'claude-2',
-        prompt: `You are a financial advisor. Provide a detailed analysis of the stock ${stockSymbol}, including its current performance and future outlook.`,
-        max_tokens_to_sample: 200
-      },
-      {
-        headers: {
-          Authorization: `Bearer ${process.env.ANTHROPIC_API_KEY}`,
-          'Content-Type': 'application/json'
-        }
-      }
-    );
+    const prompt = `You are a financial advisor. Provide a detailed analysis of the stock ${stockSymbol}, including its current performance and future outlook.`;
+    const response = await anthropicClient.complete({
+      model: 'claude-2', // Specify the Claude model version
+      prompt: `\n\nHuman: ${prompt}\n\nAssistant:`,
+      maxTokensToSample: 200,
+      temperature: 0.7, // Adjust temperature for variability in responses
+    });
 
-    return response.data.completion.trim(); // Ensure we return the clean completion text
+    return response.completion.trim(); // Return the clean response text
   } catch (error) {
     console.error('Error generating stock analysis with Claude:', error);
     return 'Unable to generate stock analysis at this time.';
@@ -211,22 +204,14 @@ async function analyzePortfolioWithClaude(stocks) {
       Provide insights on the portfolio's performance, risks, and areas of potential improvement.
     `;
 
-    const response = await axios.post(
-      'https://api.anthropic.com/v1/completions',
-      {
-        model: 'claude-2',
-        prompt,
-        max_tokens_to_sample: 500
-      },
-      {
-        headers: {
-          Authorization: `Bearer ${process.env.ANTHROPIC_API_KEY}`,
-          'Content-Type': 'application/json'
-        }
-      }
-    );
+    const response = await anthropicClient.complete({
+      model: 'claude-2',
+      prompt: `\n\nHuman: ${prompt}\n\nAssistant:`,
+      maxTokensToSample: 500,
+      temperature: 0.7,
+    });
 
-    return response.data.completion.trim(); // Ensure we return the clean completion text
+    return response.completion.trim(); // Return the clean response text
   } catch (error) {
     console.error('Error generating portfolio analysis with Claude:', error);
     return 'Unable to generate portfolio analysis at this time.';
