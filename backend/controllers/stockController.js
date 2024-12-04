@@ -173,3 +173,27 @@ exports.clearStocks = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
+
+async function analyzeStockWithClaude(stockSymbol) {
+  try {
+    const response = await axios.post(
+      'https://api.anthropic.com/v1/completions',
+      {
+        model: 'claude-2',
+        prompt: `You are a financial advisor. Provide a detailed analysis of the stock ${stockSymbol}, including its current performance and future outlook.`,
+        max_tokens_to_sample: 200
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${process.env.ANTHROPIC_API_KEY}`,
+          'Content-Type': 'application/json'
+        }
+      }
+    );
+
+    return response.data.completion.trim(); // Ensure we return the clean completion text
+  } catch (error) {
+    console.error('Error generating stock analysis with Claude:', error);
+    return 'Unable to generate stock analysis at this time.';
+  }
+}
