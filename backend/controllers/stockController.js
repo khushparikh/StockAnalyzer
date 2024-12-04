@@ -1,10 +1,10 @@
 const Stock = require('../models/Stock');
 const axios = require('axios');
-const { Client } = require('anthropic');
+const { Anthropic } = require('@anthropic-ai/sdk');
 
 // Initialize the Anthropic client
-const anthropicClient = new Client({
-  apiKey: process.env.ANTHROPIC_API_KEY, // Set your API key as an environment variable
+const anthropicClient = new Anthropic({
+  apiKey: process.env.ANTHROPIC_API_KEY, // Your API key
 });
 
 // Fetch stock details from Finnhub
