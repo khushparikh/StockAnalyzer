@@ -1,5 +1,6 @@
 const { DataTypes } = require('sequelize');
 const { sequelize } = require('../config/database');
+const { encrypt, decrypt } = require('../utils/encryption');
 
 const Stock = sequelize.define('Stock', {
   userId: {
@@ -25,24 +26,39 @@ const Stock = sequelize.define('Stock', {
     allowNull: true
   },
   quantity: {
-    type: DataTypes.INTEGER,
+    type: DataTypes.STRING,
     allowNull: false,
-    defaultValue: 0,
-    validate: {
-      min: 0
+    set(value) {
+      this.setDataValue('quantity', encrypt(value.toString()));
+    },
+    get() {
+      const value = this.getDataValue('quantity');
+      return value ? parseInt(decrypt(value)) : 0;
     }
   },
   averagePrice: {
-    type: DataTypes.DECIMAL(10, 2),
+    type: DataTypes.STRING,
     allowNull: false,
-    defaultValue: 0,
-    validate: {
-      min: 0
+    set(value) {
+      this.setDataValue('averagePrice', encrypt(value.toString()));
+    },
+    get() {
+      const value = this.getDataValue('averagePrice');
+      return value ? parseFloat(decrypt(value)) : 0;
     }
   },
   currentPrice: {
-    type: DataTypes.DECIMAL(10, 2),
-    allowNull: true
+    type: DataTypes.STRING,
+    allowNull: true,
+    set(value) {
+      if (value !== null) {
+        this.setDataValue('currentPrice', encrypt(value.toString()));
+      }
+    },
+    get() {
+      const value = this.getDataValue('currentPrice');
+      return value ? parseFloat(decrypt(value)) : null;
+    }
   },
   industry: {
     type: DataTypes.STRING,
