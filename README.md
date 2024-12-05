@@ -11,6 +11,7 @@ A Node.js application for tracking and analyzing your stock portfolio with real-
 - Detailed portfolio performance metrics
 - Intelligent investment recommendations
 - SQLite database for easy setup and portability
+- End-to-end encryption for sensitive stock data (quantities and prices)
 
 ## Prerequisites
 
@@ -33,6 +34,8 @@ stock-portfolio-tracker/
 │   ├── models/
 │   │   ├── Stock.js
 │   │   └── User.js
+│   ├── utils/
+│   │   └── encryption.js
 │   ├── routes/
 │   │   ├── stockRoutes.js
 │   │   └── userRoutes.js
@@ -75,13 +78,34 @@ DB_NAME=stock_portfolio
 DB_USER=your_db_user
 DB_PASSWORD=your_db_password
 DB_HOST=localhost
+ENCRYPTION_KEY=your_32_byte_encryption_key
 ```
 
-5. Start the development server:
+5. Generate a secure encryption key:
+
+```bash
+node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
+```
+
+6. Add the generated encryption key to your `.env` file
+
+7. Start the development server:
 
 ```bash
 npm run dev
 ```
+
+## Security Features
+
+### Data Encryption
+The application uses AES-256-CBC encryption to protect sensitive stock data:
+- Stock quantities
+- Average purchase prices
+- Current prices
+
+The encryption is transparent to API users - data is automatically:
+- Encrypted when saved to the database
+- Decrypted when retrieved through the API
 
 ## API Documentation
 
