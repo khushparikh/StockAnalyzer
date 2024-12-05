@@ -49,7 +49,7 @@ const Home = () => {
             setPassword('');
             setEmail('');
             console.log('Login successful, token:', access_token); // REMOVE LATER
-            router.push('/') // RE ROUTE TO NEXT PAGE --> Full portfolio
+            router.push('/fullPortfolio') // RE ROUTE TO NEXT PAGE --> Full portfolio
          })
          .catch((err) => {
             console.log(err.message);

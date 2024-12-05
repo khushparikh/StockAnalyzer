@@ -23,16 +23,17 @@ const analyzeStock = () => {
 
     const searchParams = useSearchParams();
     const symbol = searchParams.get("symbol");
+    console.log(symbol)
     const [stockData, setStockData] = useState<StockData | null>(null);
 
 
     useEffect(() => {
         const fetchSingleStockData = async () => {
-          fetch('http://127.0.0.1:5001/api/stocks/'+{symbol}, {
+          fetch(`http://localhost:5001/api/stocks/symbol/${symbol}`, {
             method: 'GET',
             headers: {
                 'Content-type': 'application/json; charset=UTF-8',
-                'Authorization': `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImlhdCI6MTczMzE5NjYwNiwiZXhwIjoxNzMzMjgzMDA2fQ.XUSqcvD-DHU7_R_Npo1p-P5CMSRwnsyajPxJ0abZ2Xw`,
+                'Authorization': `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImlhdCI6MTczMzM2MjMxOCwiZXhwIjoxNzMzNDQ4NzE4fQ.31bI2hfYFQlR6TExs5VKaKbiAi-Q1WQeEZpYVTLaC0Q`,
             },
           })
           .then((res) => {   
@@ -66,7 +67,7 @@ const analyzeStock = () => {
 
         
 
-
+            {stockData && stockData.symbol}
 
 
 
