@@ -3,6 +3,7 @@
 import { userAgentFromString } from "next/server";
 import { useEffect, useState } from "react";
 import { useRouter } from 'next/navigation';
+import Link from "next/link";
 
 interface PostData {
     email: string;
@@ -59,29 +60,29 @@ const Home = () => {
     
     
     return (
-        <div className="flex items-center justify-center min-h-screen bg-black px-4">
-            <div className="w-full max-w-md p-6 bg-gray-800 rounded-lg shadow-lg">
-                <h1 className="text-3xl font-bold text-white text-center mb-6">LOGIN</h1>
+        <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-700 px-4">
+            <div className="w-full max-w-md p-6 bg-gradient-to-br from-gray-900 via-gray-800 to-gray-700 rounded-lg shadow-lg">
+                <h1 className="text-4xl font-extrabold text-white text-center mb-6">LOGIN</h1>
                 
                 {/* EMAIL */}
-                <label htmlFor="email" className="block text-md font-semibold text-gray-200 mb-2">Email</label>
+                <label htmlFor="email" className="block text-md font-semibold text-white mb-2">Email</label>
                 <input
                 id="email"
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full px-4 py-2 mb-4 text-gray-900 rounded-md border border-gray-300 focus:ring-2 focus:ring-sky-500 focus:outline-none"
+                className="w-full px-4 py-2 mb-4 text-gray-900 rounded-md border border-white focus:ring-2 focus:ring-sky-500 focus:outline-none"
                 placeholder="Enter your email"
                 />
                 
                 {/* PASSWORD */}
-                <label htmlFor="password" className="block text-md font-semibold text-gray-200 mb-2">Password</label>
+                <label htmlFor="password" className="block text-md font-semibold text-white mb-2">Password</label>
                 <input
                 id="password"
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full px-4 py-2 mb-6 text-gray-900 rounded-md border border-gray-300 focus:ring-2 focus:ring-sky-500 focus:outline-none"
+                className="w-full px-4 py-2 mb-6 text-gray-900 rounded-md border border-white focus:ring-2 focus:ring-sky-500 focus:outline-none"
                 placeholder="Enter your password"
                 />
                 
@@ -93,7 +94,7 @@ const Home = () => {
                 >Login</button>
                 
                 {/* SIGNUP */}
-                <p className="mt-6 text-center text-gray-400">
+                <p className="mt-6 text-center text-white">
                 Need an account? 
                 <a href="http://localhost:3000/createUser" className="text-sky-500 hover:underline ml-1">Sign Up</a>
                 </p>
