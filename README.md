@@ -6,14 +6,15 @@ A Node.js application for tracking and analyzing your stock portfolio with real-
 - Secure user authentication with JWT
 - Personal stock portfolio management
 - Real-time stock prices and company information via Finnhub API
-- AI-generated investment advice using OpenAI
-- Portfolio performance analysis
+- Advanced AI-powered stock analysis using Anthropic's Claude
+- Detailed portfolio performance metrics
+- Intelligent investment recommendations
 - SQLite database for easy setup and portability
 
 ## Prerequisites
 - Node.js (v20 or later)
 - Finnhub API Key (get it from [Finnhub](https://finnhub.io))
-- OpenAI API Key (get it from [OpenAI Platform](https://platform.openai.com))
+- Anthropic API Key (get it from [Anthropic](https://console.anthropic.com))
 
 ## Project Structure
 ```
@@ -61,7 +62,7 @@ cp .env.example .env
 ```env
 PORT=5001
 FINNHUB_API_KEY=your_finnhub_api_key
-OPENAI_API_KEY=your_openai_api_key
+ANTHROPIC_API_KEY=your_anthropic_api_key
 JWT_SECRET=your_jwt_secret
 DB_NAME=stock_portfolio
 DB_USER=your_db_user
@@ -190,6 +191,26 @@ Example Response:
 }
 ```
 
+#### Get Stock Details with AI Analysis
+```bash
+curl -X GET http://localhost:5001/api/stocks/1/analysis \
+  -H "Authorization: Bearer <token>"
+```
+
+Example Response:
+```json
+{
+  "symbol": "AAPL",
+  "name": "Apple Inc",
+  "quantity": 10,
+  "purchasePrice": 150.50,
+  "currentPrice": 175.25,
+  "industry": "Technology",
+  "lastUpdated": "2024-03-14T10:30:00Z",
+  "aiAnalysis": "Detailed AI-powered analysis of AAPL stock performance and future outlook..."
+}
+```
+
 #### Analyze Portfolio
 ```bash
 curl -X GET http://localhost:5001/api/stocks/analyze/portfolio \
@@ -215,7 +236,7 @@ Example Response:
       "profitLossPercentage": 5.54
     }
   ],
-  "aiAnalysis": "Based on current market conditions and your portfolio composition..."
+  "aiAnalysis": "Comprehensive AI analysis of portfolio diversification, risk assessment, and recommendations..."
 }
 ```
 
@@ -400,7 +421,7 @@ Response:
       "quantity": 10,
       "averagePrice": 180.50,
       "currentPrice": 189.95,
-      "currentValue": 1899.50,
+      "value": 1899.50,
       "profitLoss": 94.50,
       "profitLossPercentage": 5.23
     },
@@ -411,7 +432,7 @@ Response:
       "quantity": 5,
       "averagePrice": 370.50,
       "currentPrice": 378.85,
-      "currentValue": 1894.25,
+      "value": 1894.25,
       "profitLoss": 41.75,
       "profitLossPercentage": 2.25
     }
@@ -421,7 +442,8 @@ Response:
     "totalInvestment": 3657.50,
     "totalProfitLoss": 136.25,
     "totalProfitLossPercentage": 3.72
-  }
+  },
+  "aiAnalysis": "Comprehensive AI analysis of portfolio diversification, risk assessment, and recommendations..."
 }
 ```
 
@@ -433,7 +455,7 @@ curl -X DELETE http://localhost:5001/api/stocks/clear \
 Response:
 ```json
 {
-  "message": "All stocks have been cleared from the database"
+  "message": "Portfolio cleared successfully"
 }
 ```
 
@@ -506,7 +528,7 @@ The project uses:
 - Sequelize as ORM
 - SQLite for database
 - JSON Web Tokens for authentication
-- OpenAI API for AI-powered insights
+- Anthropic's Claude for AI-powered insights
 - Finnhub API for real-time stock data
 
 ## Contributing

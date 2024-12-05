@@ -103,12 +103,12 @@ exports.getStockDetails = async (req, res) => {
       lastUpdated: new Date()
     });
 
-    // Get AI advice
-    const advice = await generateStockAdvice(stock.symbol);
+    // Get AI analysis using Claude
+    const analysis = await analyzeStockWithClaude(stock.symbol);
     
     res.json({
       ...stock.toJSON(),
-      advice
+      aiAnalysis: analysis
     });
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -147,6 +147,9 @@ exports.analyzePortfolio = async (req, res) => {
       });
     }
 
+    // Get AI analysis for the entire portfolio
+    const portfolioAnalysis = await analyzePortfolioWithClaude(stocksWithCurrentValue);
+
     res.json({
       stocks: stocksWithCurrentValue,
       summary: {
@@ -154,14 +157,14 @@ exports.analyzePortfolio = async (req, res) => {
         totalInvestment,
         totalProfitLoss: totalValue - totalInvestment,
         totalProfitLossPercentage: ((totalValue - totalInvestment) / totalInvestment) * 100
-      }
+      },
+      aiAnalysis: portfolioAnalysis
     });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 };
 
-// Clear all stocks
 exports.clearStocks = async (req, res) => {
   try {
     await Stock.destroy({
@@ -191,7 +194,6 @@ async function analyzeStockWithClaude(stockSymbol) {
   }
 }
 
-// Function to analyze an entire portfolio with Claude
 async function analyzePortfolioWithClaude(stocks) {
   try {
     const portfolioSummary = stocks
