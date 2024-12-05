@@ -3,6 +3,7 @@
 A Node.js application for tracking and analyzing your stock portfolio with real-time prices, AI-powered insights, and user authentication.
 
 ## Features
+
 - Secure user authentication with JWT
 - Personal stock portfolio management
 - Real-time stock prices and company information via Finnhub API
@@ -12,11 +13,13 @@ A Node.js application for tracking and analyzing your stock portfolio with real-
 - SQLite database for easy setup and portability
 
 ## Prerequisites
+
 - Node.js (v20 or later)
 - Finnhub API Key (get it from [Finnhub](https://finnhub.io))
 - Anthropic API Key (get it from [Anthropic](https://console.anthropic.com))
 
 ## Project Structure
+
 ```
 stock-portfolio-tracker/
 ├── backend/
@@ -44,21 +47,25 @@ stock-portfolio-tracker/
 ## Getting Started
 
 1. Navigate to the backend directory:
+
 ```bash
 cd backend
 ```
 
 2. Install dependencies:
+
 ```bash
 npm install
 ```
 
 3. Create a `.env` file in the backend directory:
+
 ```bash
 cp .env.example .env
 ```
 
 4. Update the `.env` file with your credentials:
+
 ```env
 PORT=5001
 FINNHUB_API_KEY=your_finnhub_api_key
@@ -71,6 +78,7 @@ DB_HOST=localhost
 ```
 
 5. Start the development server:
+
 ```bash
 npm run dev
 ```
@@ -80,6 +88,7 @@ npm run dev
 ### Authentication Endpoints
 
 #### Register a New User
+
 ```bash
 curl -X POST http://localhost:5001/api/users/register \
   -H "Content-Type: application/json" \
@@ -91,6 +100,7 @@ curl -X POST http://localhost:5001/api/users/register \
 ```
 
 Example Response:
+
 ```json
 {
   "message": "User registered successfully",
@@ -99,6 +109,7 @@ Example Response:
 ```
 
 #### Login
+
 ```bash
 curl -X POST http://localhost:5001/api/users/login \
   -H "Content-Type: application/json" \
@@ -109,6 +120,7 @@ curl -X POST http://localhost:5001/api/users/login \
 ```
 
 Example Response:
+
 ```json
 {
   "message": "Login successful",
@@ -117,15 +129,18 @@ Example Response:
 ```
 
 ### Stock Portfolio Endpoints
+
 All stock endpoints require authentication. Replace `<token>` with your JWT token in the following commands.
 
 #### Get All Stocks in Portfolio
+
 ```bash
 curl -X GET http://localhost:5001/api/stocks \
   -H "Authorization: Bearer <token>"
 ```
 
 Example Response:
+
 ```json
 [
   {
@@ -142,6 +157,7 @@ Example Response:
 ```
 
 #### Add a Stock
+
 ```bash
 curl -X POST http://localhost:5001/api/stocks/add \
   -H "Content-Type: application/json" \
@@ -154,6 +170,7 @@ curl -X POST http://localhost:5001/api/stocks/add \
 ```
 
 Example Response:
+
 ```json
 {
   "id": 1,
@@ -168,36 +185,36 @@ Example Response:
 ```
 
 #### Get Stock Details
+
 ```bash
-curl -X GET http://localhost:5001/api/stocks/1 \
+curl -X GET http://localhost:5001/api/stocks/symbol/AAPL \
   -H "Authorization: Bearer <token>"
 ```
 
 Example Response:
+
 ```json
 {
-  "id": 1,
   "symbol": "AAPL",
   "name": "Apple Inc",
   "quantity": 10,
-  "averagePrice": 180.50,
-  "currentPrice": 190.50,
-  "totalValue": 1905.00,
-  "profitLoss": 100.00,
-  "profitLossPercentage": 5.54,
-  "userId": 1,
-  "createdAt": "2024-11-29T01:59:19.820Z",
-  "updatedAt": "2024-11-29T01:59:19.820Z"
+  "purchasePrice": 150.50,
+  "currentPrice": 175.25,
+  "industry": "Technology",
+  "lastUpdated": "2024-03-14T10:30:00Z",
+  "aiAnalysis": "Detailed AI-powered analysis of AAPL stock performance and future outlook..."
 }
 ```
 
 #### Get Stock Details with AI Analysis
+
 ```bash
-curl -X GET http://localhost:5001/api/stocks/1/analysis \
+curl -X GET http://localhost:5001/api/stocks/symbol/AAPL/analysis \
   -H "Authorization: Bearer <token>"
 ```
 
 Example Response:
+
 ```json
 {
   "symbol": "AAPL",
@@ -212,12 +229,14 @@ Example Response:
 ```
 
 #### Analyze Portfolio
+
 ```bash
 curl -X GET http://localhost:5001/api/stocks/analyze/portfolio \
   -H "Authorization: Bearer <token>"
 ```
 
 Example Response:
+
 ```json
 {
   "totalValue": 1905.00,
@@ -241,12 +260,14 @@ Example Response:
 ```
 
 #### Clear Portfolio
+
 ```bash
 curl -X DELETE http://localhost:5001/api/stocks/clear \
   -H "Authorization: Bearer <token>"
 ```
 
 Example Response:
+
 ```json
 {
   "message": "Portfolio cleared successfully"
@@ -254,7 +275,9 @@ Example Response:
 ```
 
 ### Error Responses
+
 Example of an error response:
+
 ```json
 {
   "error": "Authentication required"
@@ -266,6 +289,7 @@ Example of an error response:
 Here's a step-by-step guide to test all endpoints with curl commands and expected responses:
 
 ### 1. Register a New User
+
 ```bash
 curl -X POST http://localhost:5001/api/users/register \
   -H "Content-Type: application/json" \
@@ -275,7 +299,9 @@ curl -X POST http://localhost:5001/api/users/register \
     "password": "password123"
   }'
 ```
+
 Response:
+
 ```json
 {
   "message": "User registered successfully",
@@ -284,6 +310,7 @@ Response:
 ```
 
 ### 2. Login
+
 ```bash
 curl -X POST http://localhost:5001/api/users/login \
   -H "Content-Type: application/json" \
@@ -292,7 +319,9 @@ curl -X POST http://localhost:5001/api/users/login \
     "password": "password123"
   }'
 ```
+
 Response:
+
 ```json
 {
   "message": "Login successful",
@@ -301,6 +330,7 @@ Response:
 ```
 
 ### 3. Add First Stock (AAPL)
+
 ```bash
 # Replace <token> with the JWT token received from login
 curl -X POST http://localhost:5001/api/stocks/add \
@@ -312,7 +342,9 @@ curl -X POST http://localhost:5001/api/stocks/add \
     "averagePrice": 180.50
   }'
 ```
+
 Response:
+
 ```json
 {
   "id": 1,
@@ -327,6 +359,7 @@ Response:
 ```
 
 ### 4. Add Second Stock (MSFT)
+
 ```bash
 curl -X POST http://localhost:5001/api/stocks/add \
   -H "Content-Type: application/json" \
@@ -337,7 +370,9 @@ curl -X POST http://localhost:5001/api/stocks/add \
     "averagePrice": 370.50
   }'
 ```
+
 Response:
+
 ```json
 {
   "id": 2,
@@ -352,11 +387,14 @@ Response:
 ```
 
 ### 5. Get All Stocks
+
 ```bash
 curl -X GET http://localhost:5001/api/stocks \
   -H "Authorization: Bearer <token>"
 ```
+
 Response:
+
 ```json
 [
   {
@@ -383,34 +421,36 @@ Response:
 ```
 
 ### 6. Get Single Stock Details
+
 ```bash
-curl -X GET http://localhost:5001/api/stocks/1 \
+curl -X GET http://localhost:5001/api/stocks/symbol/AAPL \
   -H "Authorization: Bearer <token>"
 ```
+
 Response:
+
 ```json
 {
-  "id": 1,
-  "userId": 1,
   "symbol": "AAPL",
   "name": "Apple Inc",
   "quantity": 10,
-  "averagePrice": 180.50,
-  "createdAt": "2024-11-29T02:03:11.426Z",
-  "updatedAt": "2024-11-29T02:03:11.426Z",
-  "currentPrice": 189.95,
-  "totalValue": 1899.50,
-  "profitLoss": 94.50,
-  "profitLossPercentage": 5.23
+  "purchasePrice": 150.50,
+  "currentPrice": 175.25,
+  "industry": "Technology",
+  "lastUpdated": "2024-03-14T10:30:00Z",
+  "aiAnalysis": "Detailed AI-powered analysis of AAPL stock performance and future outlook..."
 }
 ```
 
 ### 7. Analyze Portfolio
+
 ```bash
 curl -X GET http://localhost:5001/api/stocks/analyze/portfolio \
   -H "Authorization: Bearer <token>"
 ```
+
 Response:
+
 ```json
 {
   "stocks": [
@@ -448,11 +488,14 @@ Response:
 ```
 
 ### 8. Clear Portfolio
+
 ```bash
 curl -X DELETE http://localhost:5001/api/stocks/clear \
   -H "Authorization: Bearer <token>"
 ```
+
 Response:
+
 ```json
 {
   "message": "Portfolio cleared successfully"
@@ -460,27 +503,54 @@ Response:
 ```
 
 ### 9. Verify Empty Portfolio
+
 ```bash
 curl -X GET http://localhost:5001/api/stocks \
   -H "Authorization: Bearer <token>"
 ```
+
 Response:
+
 ```json
 []
 ```
 
 ## Testing Results Summary
 
-✅ User Registration: Creates new user and returns JWT token  
-✅ User Login: Authenticates user and returns JWT token  
-✅ Add Stock: Successfully adds stocks to portfolio  
-✅ Get All Stocks: Returns list of all stocks in portfolio  
-✅ Get Stock Details: Returns detailed information for a specific stock  
-✅ Portfolio Analysis: Provides comprehensive portfolio analysis with real-time data  
-✅ Clear Portfolio: Removes all stocks from portfolio  
-✅ Empty Portfolio Verification: Confirms portfolio is empty after clearing  
+### API Endpoint Tests
+
+```bash
+# Get Stock by Symbol Test
+curl -X GET http://localhost:5001/api/stocks/symbol/AAPL \
+  -H "Authorization: Bearer your_jwt_token"
+
+Expected Response:
+{
+  "symbol": "AAPL",
+  "name": "Apple Inc",
+  "quantity": 10,
+  "purchasePrice": 150.50,
+  "currentPrice": 175.25,
+  "industry": "Technology",
+  "lastUpdated": "2024-03-14T10:30:00Z",
+  "aiAnalysis": "Detailed AI-powered analysis of AAPL stock performance and future outlook..."
+}
+```
+
+### Test Results
+
+- User Registration: Creates new user and returns JWT token
+- User Login: Authenticates user and returns JWT token
+- Add Stock: Successfully adds stocks to portfolio
+- Get All Stocks: Returns list of all stocks in portfolio
+- Get Stock by Symbol: Returns detailed stock information with AI analysis
+- Get Stock Details: Returns detailed information for a specific stock
+- Portfolio Analysis: Provides comprehensive portfolio analysis with real-time data
+- Clear Portfolio: Removes all stocks from portfolio
+- Empty Portfolio Verification: Confirms portfolio is empty after clearing
 
 ### Notes
+
 - Keep the JWT token from the login/register response for subsequent requests
 - Replace `<token>` in the commands with your actual JWT token
 - Stock prices in responses may vary as they are fetched in real-time
@@ -489,25 +559,29 @@ Response:
 ## Data Models
 
 ### User Model
-| Field    | Type   | Description              | Notes                          |
-|----------|--------|--------------------------|--------------------------------|
-| username | STRING | User's username          | Required, Unique               |
-| email    | STRING | User's email address     | Required, Unique               |
-| password | STRING | Hashed password          | Required                       |
+
+| Field    | Type   | Description          | Notes            |
+| -------- | ------ | -------------------- | ---------------- |
+| username | STRING | User's username      | Required, Unique |
+| email    | STRING | User's email address | Required, Unique |
+| password | STRING | Hashed password      | Required         |
 
 ### Stock Model
-| Field        | Type    | Description                        | Notes                          |
-|-------------|---------|------------------------------------|---------------------------------|
-| userId      | INTEGER | Reference to user                  | Required, Foreign Key          |
-| symbol      | STRING  | Stock ticker symbol                | Required                       |
-| name        | STRING  | Company name                       | Optional                       |
-| quantity    | INTEGER | Number of shares                   | Required, Min: 0               |
-| averagePrice| DECIMAL | Average purchase price per share   | Required, Min: 0               |
-| createdAt   | DATE    | Record creation timestamp          | Automatically managed          |
-| updatedAt   | DATE    | Record update timestamp            | Automatically managed          |
+
+| Field        | Type    | Description                      | Notes                 |
+| ------------ | ------- | -------------------------------- | --------------------- |
+| userId       | INTEGER | Reference to user                | Required, Foreign Key |
+| symbol       | STRING  | Stock ticker symbol              | Required              |
+| name         | STRING  | Company name                     | Optional              |
+| quantity     | INTEGER | Number of shares                 | Required, Min: 0      |
+| averagePrice | DECIMAL | Average purchase price per share | Required, Min: 0      |
+| createdAt    | DATE    | Record creation timestamp        | Automatically managed |
+| updatedAt    | DATE    | Record update timestamp          | Automatically managed |
 
 ## Error Handling
+
 The API returns appropriate HTTP status codes and error messages:
+
 - 200: Success
 - 201: Created
 - 400: Bad Request
@@ -516,6 +590,7 @@ The API returns appropriate HTTP status codes and error messages:
 - 500: Server Error
 
 ## Security Features
+
 - Password hashing using bcrypt
 - JWT-based authentication
 - Protected routes requiring authentication
@@ -523,7 +598,9 @@ The API returns appropriate HTTP status codes and error messages:
 - Secure password storage
 
 ## Development
+
 The project uses:
+
 - Express.js for the API server
 - Sequelize as ORM
 - SQLite for database
@@ -532,6 +609,7 @@ The project uses:
 - Finnhub API for real-time stock data
 
 ## Contributing
+
 1. Fork the repository
 2. Create your feature branch
 3. Commit your changes

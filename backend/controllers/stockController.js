@@ -26,29 +26,6 @@ async function fetchStockDetails(symbol) {
   }
 }
 
-// Generate AI Stock Advice
-async function generateStockAdvice(stockSymbol) {
-  try {
-    const response = await openai.createChatCompletion({
-      model: "gpt-3.5-turbo",
-      messages: [
-        {
-          role: "system", 
-          content: "You are a financial advisor providing stock analysis."
-        },
-        {
-          role: "user",
-          content: `Provide a brief analysis and recommendation for ${stockSymbol} stock.`
-        }
-      ]
-    });
-    return response.data.choices[0].message.content;
-  } catch (error) {
-    console.error('Error generating stock advice:', error);
-    return 'Unable to generate stock advice at this time.';
-  }
-}
-
 // Get all stocks in portfolio
 exports.getAllStocks = async (req, res) => {
   try {
@@ -92,6 +69,44 @@ exports.getStockDetails = async (req, res) => {
     
     if (!stock) {
       return res.status(404).json({ message: 'Stock not found' });
+    }
+
+    // Update current price and details
+    const stockDetails = await fetchStockDetails(stock.symbol);
+    await stock.update({
+      currentPrice: stockDetails.currentPrice,
+      name: stockDetails.name,
+      industry: stockDetails.industry,
+      lastUpdated: new Date()
+    });
+
+    // Get AI analysis using Claude
+    const analysis = await analyzeStockWithClaude(stock.symbol);
+    
+    res.json({
+      ...stock.toJSON(),
+      aiAnalysis: analysis
+    });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+// Get stock by symbol
+exports.getStockBySymbol = async (req, res) => {
+  try {
+    const { symbol } = req.params;
+    const userId = req.user.id;
+
+    const stock = await Stock.findOne({ 
+      where: { 
+        symbol: symbol.toUpperCase(),
+        userId 
+      } 
+    });
+    
+    if (!stock) {
+      return res.status(404).json({ message: 'Stock not found in your portfolio' });
     }
 
     // Update current price and details
