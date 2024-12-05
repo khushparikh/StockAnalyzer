@@ -1,10 +1,10 @@
 const Stock = require('../models/Stock');
 const axios = require('axios');
-const OpenAI = require('openai');
+const { Anthropic } = require('@anthropic-ai/sdk');
 
-// Configure OpenAI
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
+// Initialize the Anthropic client
+const anthropicClient = new Anthropic({
+  apiKey: process.env.ANTHROPIC_API_KEY, // Your API key
 });
 
 // Fetch stock details from Finnhub
@@ -26,29 +26,6 @@ async function fetchStockDetails(symbol) {
   }
 }
 
-// Generate AI Stock Advice
-async function generateStockAdvice(stockSymbol) {
-  try {
-    const response = await openai.createChatCompletion({
-      model: "gpt-3.5-turbo",
-      messages: [
-        {
-          role: "system", 
-          content: "You are a financial advisor providing stock analysis."
-        },
-        {
-          role: "user",
-          content: `Provide a brief analysis and recommendation for ${stockSymbol} stock.`
-        }
-      ]
-    });
-    return response.data.choices[0].message.content;
-  } catch (error) {
-    console.error('Error generating stock advice:', error);
-    return 'Unable to generate stock advice at this time.';
-  }
-}
-
 // Get all stocks in portfolio
 exports.getAllStocks = async (req, res) => {
   try {
@@ -64,23 +41,42 @@ exports.getAllStocks = async (req, res) => {
 exports.addStock = async (req, res) => {
   try {
     const { symbol, quantity } = req.body;
-    const userId = req.user.id; // Assuming authentication middleware sets req.user
+    
+    if (!symbol || !quantity) {
+      return res.status(400).json({ message: 'Symbol and quantity are required' });
+    }
 
+    const userId = req.user.id;
+
+    // Fetch current stock details from Finnhub
     const stockDetails = await fetchStockDetails(symbol);
+    
+    if (!stockDetails.currentPrice) {
+      return res.status(400).json({ message: 'Could not fetch current stock price' });
+    }
 
+    // Create the stock with current price as purchase price
     const stock = await Stock.create({
       symbol: symbol.toUpperCase(),
       name: stockDetails.name,
       quantity,
-      purchasePrice: stockDetails.currentPrice,
+      averagePrice: stockDetails.currentPrice, // Use currentPrice as averagePrice
       currentPrice: stockDetails.currentPrice,
       industry: stockDetails.industry,
       lastUpdated: new Date(),
       userId
     });
 
-    res.status(201).json(stock);
+    // Fetch the created stock to ensure all fields are returned
+    const createdStock = await Stock.findByPk(stock.id);
+    
+    res.status(201).json({
+      ...createdStock.toJSON(),
+      currentPrice: stockDetails.currentPrice,
+      industry: stockDetails.industry
+    });
   } catch (error) {
+    console.error('Error adding stock:', error);
     res.status(400).json({ message: error.message });
   }
 };
@@ -103,12 +99,50 @@ exports.getStockDetails = async (req, res) => {
       lastUpdated: new Date()
     });
 
-    // Get AI advice
-    const advice = await generateStockAdvice(stock.symbol);
+    // Get AI analysis using Claude
+    const analysis = await analyzeStockWithClaude(stock.symbol);
     
     res.json({
       ...stock.toJSON(),
-      advice
+      aiAnalysis: analysis
+    });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+// Get stock by symbol
+exports.getStockBySymbol = async (req, res) => {
+  try {
+    const { symbol } = req.params;
+    const userId = req.user.id;
+
+    const stock = await Stock.findOne({ 
+      where: { 
+        symbol: symbol.toUpperCase(),
+        userId 
+      } 
+    });
+    
+    if (!stock) {
+      return res.status(404).json({ message: 'Stock not found in your portfolio' });
+    }
+
+    // Update current price and details
+    const stockDetails = await fetchStockDetails(stock.symbol);
+    await stock.update({
+      currentPrice: stockDetails.currentPrice,
+      name: stockDetails.name,
+      industry: stockDetails.industry,
+      lastUpdated: new Date()
+    });
+
+    // Get AI analysis using Claude
+    const analysis = await analyzeStockWithClaude(stock.symbol);
+    
+    res.json({
+      ...stock.toJSON(),
+      aiAnalysis: analysis
     });
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -147,6 +181,9 @@ exports.analyzePortfolio = async (req, res) => {
       });
     }
 
+    // Get AI analysis for the entire portfolio
+    const portfolioAnalysis = await analyzePortfolioWithClaude(stocksWithCurrentValue);
+
     res.json({
       stocks: stocksWithCurrentValue,
       summary: {
@@ -154,14 +191,14 @@ exports.analyzePortfolio = async (req, res) => {
         totalInvestment,
         totalProfitLoss: totalValue - totalInvestment,
         totalProfitLossPercentage: ((totalValue - totalInvestment) / totalInvestment) * 100
-      }
+      },
+      aiAnalysis: portfolioAnalysis
     });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 };
 
-// Clear all stocks
 exports.clearStocks = async (req, res) => {
   try {
     await Stock.destroy({
@@ -173,3 +210,46 @@ exports.clearStocks = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
+
+async function analyzeStockWithClaude(stockSymbol) {
+  try {
+    const prompt = `You are a financial advisor. Provide a brief analysis of the stock ${stockSymbol}, focusing on key performance indicators and current market position. Keep it concise.`;
+    const response = await anthropicClient.messages.create({
+      model: 'claude-3-haiku-20240307',
+      max_tokens: 150,
+      temperature: 0.7,
+      messages: [
+        { role: 'user', content: prompt }
+      ]
+    });
+
+    return response.content[0].text;
+  } catch (error) {
+    console.error('Error generating stock analysis with Claude:', error);
+    return 'Unable to generate stock analysis at this time.';
+  }
+}
+
+async function analyzePortfolioWithClaude(stocks) {
+  try {
+    const portfolioSummary = stocks
+      .map(stock => `${stock.symbol}: ${stock.quantity} shares at $${stock.currentPrice}`)
+      .join('\n');
+
+    const prompt = `As a financial advisor, provide a brief analysis of this portfolio:\n${portfolioSummary}\nFocus on diversification and risk assessment. Keep it concise.`;
+    
+    const response = await anthropicClient.messages.create({
+      model: 'claude-3-haiku-20240307',
+      max_tokens: 200,
+      temperature: 0.7,
+      messages: [
+        { role: 'user', content: prompt }
+      ]
+    });
+
+    return response.content[0].text;
+  } catch (error) {
+    console.error('Error analyzing portfolio with Claude:', error);
+    return 'Unable to generate portfolio analysis at this time.';
+  }
+}
