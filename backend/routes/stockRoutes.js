@@ -6,6 +6,9 @@ const { authenticate } = require('../middleware/auth');
 // Get all stocks in the user's portfolio
 router.get('/', authenticate, stockController.getAllStocks);
 
+// Get stock by symbol
+router.get('/symbol/:symbol', authenticate, stockController.getStockBySymbol);
+
 // Add a new stock
 router.post('/add', authenticate, stockController.addStock);
 
