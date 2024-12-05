@@ -17,9 +17,9 @@ interface Stock {
 }
 
 const PortfolioPage = () => {
-  const [stockData, setStockData] = useState<Stock[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  // const [stockData, setStockData] = useState<Stock[]>([]);
+  // const [loading, setLoading] = useState(true);
+  // const [error, setError] = useState<string | null>(null);
   const [stock, setStock] = useState<Stock[]>([]);
   const [searchSymbol, setSearchSymbol] = useState("");
   const [addSymbol, setAddSymbol] = useState('');
@@ -30,7 +30,7 @@ const PortfolioPage = () => {
       method: 'GET',
       headers: {
           'Content-type': 'application/json; charset=UTF-8',
-          'Authorization': `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImlhdCI6MTczMzQzNTk0NiwiZXhwIjoxNzMzNTIyMzQ2fQ.mXUKWyOoGKDTDuoFofEPZHWLas70pCtOvxCD_jnjvF8`,
+          'Authorization': `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImlhdCI6MTczMzQzODYyNywiZXhwIjoxNzMzNTI1MDI3fQ.l5TRjcKfHemO0uTFCK3ZhsX_0oxGr4arhxNYI0a7IZU`,
       },
     })
     .then((res) => {
@@ -46,7 +46,7 @@ const PortfolioPage = () => {
     })
     .catch((err) => {
       console.log(err.message);
-      alert('Login failed. Please try again.');
+      alert('Failed to get all stocks. Please try again.');
     });
   };
 
@@ -61,16 +61,12 @@ const PortfolioPage = () => {
     }),
       headers: {
           'Content-type': 'application/json; charset=UTF-8',
-          'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImlhdCI6MTczMzQzNTk0NiwiZXhwIjoxNzMzNTIyMzQ2fQ.mXUKWyOoGKDTDuoFofEPZHWLas70pCtOvxCD_jnjvF8'
+          'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImlhdCI6MTczMzQzODYyNywiZXhwIjoxNzMzNTI1MDI3fQ.l5TRjcKfHemO0uTFCK3ZhsX_0oxGr4arhxNYI0a7IZU'
       },
     })
     .then((res) => {   
       if (!res.ok) {
-          if (res.status === 401)
-          {
-              throw new Error('Invalid credentials: ' + res.statusText);
-          }
-          throw new Error('Login failed: ' + res.statusText);
+        throw new Error('Failed to add stock. Please try again: ' + res.statusText)
       }
       return res.json();
     })
@@ -81,7 +77,7 @@ const PortfolioPage = () => {
     })
     .catch((err) => {
        console.log(err.message);
-       alert('Login failed. Please try again.');
+       alert('Failed to add stock. Please try again.');
     }); 
   }
  
@@ -152,7 +148,7 @@ return (
 
 
 
-    {/* Additional Search Bars */}
+    {/* Add Stock */}
     <div className="mt-6 max-w-4xl mx-auto space-x-4 flex justify-between items-center">
     <input
         type="text"
