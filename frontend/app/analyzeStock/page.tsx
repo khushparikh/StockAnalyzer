@@ -15,9 +15,8 @@ interface StockData {
     profitLossPercentage: number,
     userId: number,
     createdAt: string,
-    updatedAt: string
-
-
+    updatedAt: string,
+    aiAnalysis: string
 }
 
 const analyzeStock = () => {
