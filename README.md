@@ -164,8 +164,7 @@ curl -X POST http://localhost:5001/api/stocks/add \
   -H "Authorization: Bearer <token>" \
   -d '{
     "symbol": "AAPL",
-    "quantity": 10,
-    "averagePrice": 180.50
+    "quantity": 10
   }'
 ```
 
@@ -177,10 +176,13 @@ Example Response:
   "symbol": "AAPL",
   "name": "Apple Inc",
   "quantity": 10,
-  "averagePrice": 180.50,
+  "purchasePrice": 175.25,
+  "currentPrice": 175.25,
+  "industry": "Technology",
+  "lastUpdated": "2024-03-14T10:30:00Z",
   "userId": 1,
-  "createdAt": "2024-11-29T01:59:19.820Z",
-  "updatedAt": "2024-11-29T01:59:19.820Z"
+  "createdAt": "2024-03-14T10:30:00Z",
+  "updatedAt": "2024-03-14T10:30:00Z"
 }
 ```
 
@@ -338,8 +340,7 @@ curl -X POST http://localhost:5001/api/stocks/add \
   -H "Authorization: Bearer <token>" \
   -d '{
     "symbol": "AAPL",
-    "quantity": 10,
-    "averagePrice": 180.50
+    "quantity": 10
   }'
 ```
 
@@ -351,10 +352,13 @@ Response:
   "symbol": "AAPL",
   "name": "Apple Inc",
   "quantity": 10,
-  "averagePrice": 180.50,
+  "purchasePrice": 175.25,
+  "currentPrice": 175.25,
+  "industry": "Technology",
+  "lastUpdated": "2024-03-14T10:30:00Z",
   "userId": 1,
-  "updatedAt": "2024-11-29T02:03:11.426Z",
-  "createdAt": "2024-11-29T02:03:11.426Z"
+  "createdAt": "2024-03-14T10:30:00Z",
+  "updatedAt": "2024-03-14T10:30:00Z"
 }
 ```
 
@@ -366,8 +370,7 @@ curl -X POST http://localhost:5001/api/stocks/add \
   -H "Authorization: Bearer <token>" \
   -d '{
     "symbol": "MSFT",
-    "quantity": 5,
-    "averagePrice": 370.50
+    "quantity": 5
   }'
 ```
 
@@ -379,10 +382,13 @@ Response:
   "symbol": "MSFT",
   "name": "Microsoft Corp",
   "quantity": 5,
-  "averagePrice": 370.50,
+  "purchasePrice": 175.25,
+  "currentPrice": 175.25,
+  "industry": "Technology",
+  "lastUpdated": "2024-03-14T10:30:00Z",
   "userId": 1,
-  "updatedAt": "2024-11-29T02:03:24.855Z",
-  "createdAt": "2024-11-29T02:03:24.855Z"
+  "createdAt": "2024-03-14T10:30:00Z",
+  "updatedAt": "2024-03-14T10:30:00Z"
 }
 ```
 

@@ -41,23 +41,42 @@ exports.getAllStocks = async (req, res) => {
 exports.addStock = async (req, res) => {
   try {
     const { symbol, quantity } = req.body;
-    const userId = req.user.id; // Assuming authentication middleware sets req.user
+    
+    if (!symbol || !quantity) {
+      return res.status(400).json({ message: 'Symbol and quantity are required' });
+    }
 
+    const userId = req.user.id;
+
+    // Fetch current stock details from Finnhub
     const stockDetails = await fetchStockDetails(symbol);
+    
+    if (!stockDetails.currentPrice) {
+      return res.status(400).json({ message: 'Could not fetch current stock price' });
+    }
 
+    // Create the stock with current price as purchase price
     const stock = await Stock.create({
       symbol: symbol.toUpperCase(),
       name: stockDetails.name,
       quantity,
-      purchasePrice: stockDetails.currentPrice,
+      averagePrice: stockDetails.currentPrice, // Use currentPrice as averagePrice
       currentPrice: stockDetails.currentPrice,
       industry: stockDetails.industry,
       lastUpdated: new Date(),
       userId
     });
 
-    res.status(201).json(stock);
+    // Fetch the created stock to ensure all fields are returned
+    const createdStock = await Stock.findByPk(stock.id);
+    
+    res.status(201).json({
+      ...createdStock.toJSON(),
+      currentPrice: stockDetails.currentPrice,
+      industry: stockDetails.industry
+    });
   } catch (error) {
+    console.error('Error adding stock:', error);
     res.status(400).json({ message: error.message });
   }
 };
@@ -194,15 +213,17 @@ exports.clearStocks = async (req, res) => {
 
 async function analyzeStockWithClaude(stockSymbol) {
   try {
-    const prompt = `You are a financial advisor. Provide a detailed analysis of the stock ${stockSymbol}, including its current performance and future outlook.`;
-    const response = await anthropicClient.complete({
-      model: 'claude-2', // Specify the Claude model version
-      prompt: `\n\nHuman: ${prompt}\n\nAssistant:`,
-      maxTokensToSample: 200,
-      temperature: 0.7, // Adjust temperature for variability in responses
+    const prompt = `You are a financial advisor. Provide a brief analysis of the stock ${stockSymbol}, focusing on key performance indicators and current market position. Keep it concise.`;
+    const response = await anthropicClient.messages.create({
+      model: 'claude-3-haiku-20240307',
+      max_tokens: 150,
+      temperature: 0.7,
+      messages: [
+        { role: 'user', content: prompt }
+      ]
     });
 
-    return response.completion.trim(); // Return the clean response text
+    return response.content[0].text;
   } catch (error) {
     console.error('Error generating stock analysis with Claude:', error);
     return 'Unable to generate stock analysis at this time.';
@@ -212,25 +233,23 @@ async function analyzeStockWithClaude(stockSymbol) {
 async function analyzePortfolioWithClaude(stocks) {
   try {
     const portfolioSummary = stocks
-      .map(stock => `Stock: ${stock.symbol}, Quantity: ${stock.quantity}, Current Price: ${stock.currentPrice}`)
+      .map(stock => `${stock.symbol}: ${stock.quantity} shares at $${stock.currentPrice}`)
       .join('\n');
 
-    const prompt = `
-      You are a financial advisor. Analyze the following portfolio:
-      ${portfolioSummary}
-      Provide insights on the portfolio's performance, risks, and areas of potential improvement.
-    `;
-
-    const response = await anthropicClient.complete({
-      model: 'claude-2',
-      prompt: `\n\nHuman: ${prompt}\n\nAssistant:`,
-      maxTokensToSample: 500,
+    const prompt = `As a financial advisor, provide a brief analysis of this portfolio:\n${portfolioSummary}\nFocus on diversification and risk assessment. Keep it concise.`;
+    
+    const response = await anthropicClient.messages.create({
+      model: 'claude-3-haiku-20240307',
+      max_tokens: 200,
       temperature: 0.7,
+      messages: [
+        { role: 'user', content: prompt }
+      ]
     });
 
-    return response.completion.trim(); // Return the clean response text
+    return response.content[0].text;
   } catch (error) {
-    console.error('Error generating portfolio analysis with Claude:', error);
+    console.error('Error analyzing portfolio with Claude:', error);
     return 'Unable to generate portfolio analysis at this time.';
   }
 }

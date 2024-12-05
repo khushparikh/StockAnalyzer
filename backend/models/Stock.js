@@ -35,17 +35,29 @@ const Stock = sequelize.define('Stock', {
   averagePrice: {
     type: DataTypes.DECIMAL(10, 2),
     allowNull: false,
-    defaultValue: 0.00,
+    defaultValue: 0,
     validate: {
       min: 0
     }
+  },
+  currentPrice: {
+    type: DataTypes.DECIMAL(10, 2),
+    allowNull: true
+  },
+  industry: {
+    type: DataTypes.STRING,
+    allowNull: true
+  },
+  lastUpdated: {
+    type: DataTypes.DATE,
+    allowNull: true
   }
 }, {
   timestamps: true
 });
 
 // Define the relationship with User model
-Stock.associate = (models) => {
+Stock.associate = function(models) {
   Stock.belongsTo(models.User, {
     foreignKey: 'userId',
     as: 'user'
