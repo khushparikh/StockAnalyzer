@@ -130,103 +130,82 @@ Example Response:
 
 ### Stock Portfolio Endpoints
 
-All stock endpoints require authentication. Replace `<token>` with your JWT token in the following commands.
-
-#### Get All Stocks in Portfolio
-
-```bash
-curl -X GET http://localhost:5001/api/stocks \
-  -H "Authorization: Bearer <token>"
-```
-
-Example Response:
-
-```json
-[
-  {
-    "id": 1,
-    "symbol": "AAPL",
-    "name": "Apple Inc",
-    "quantity": 10,
-    "averagePrice": 180.50,
-    "userId": 1,
-    "createdAt": "2024-11-29T01:59:19.820Z",
-    "updatedAt": "2024-11-29T01:59:19.820Z"
-  }
-]
-```
+All stock endpoints require authentication. Replace `your_jwt_token` with your actual JWT token.
 
 #### Add a Stock
-
 ```bash
 curl -X POST http://localhost:5001/api/stocks/add \
   -H "Content-Type: application/json" \
-  -H "Authorization: Bearer <token>" \
+  -H "Authorization: Bearer your_jwt_token" \
   -d '{
     "symbol": "AAPL",
     "quantity": 10
   }'
 ```
 
-Example Response:
-
+Response:
 ```json
 {
   "id": 1,
+  "userId": 1,
   "symbol": "AAPL",
   "name": "Apple Inc",
   "quantity": 10,
-  "purchasePrice": 175.25,
-  "currentPrice": 175.25,
+  "averagePrice": 243.01,
+  "currentPrice": 243.01,
   "industry": "Technology",
-  "lastUpdated": "2024-03-14T10:30:00Z",
-  "userId": 1,
-  "createdAt": "2024-03-14T10:30:00Z",
-  "updatedAt": "2024-03-14T10:30:00Z"
+  "lastUpdated": "2024-12-05T00:23:56.502Z",
+  "createdAt": "2024-12-05T00:23:56.502Z",
+  "updatedAt": "2024-12-05T00:23:56.502Z"
 }
 ```
 
-#### Get Stock Details
+#### Get All Stocks
+```bash
+curl -X GET http://localhost:5001/api/stocks \
+  -H "Authorization: Bearer your_jwt_token"
+```
 
+Response:
+```json
+[
+  {
+    "id": 1,
+    "userId": 1,
+    "symbol": "AAPL",
+    "name": "Apple Inc",
+    "quantity": 10,
+    "averagePrice": 243.01,
+    "currentPrice": 243.01,
+    "industry": "Technology",
+    "lastUpdated": "2024-12-05T00:23:56.502Z",
+    "createdAt": "2024-12-05T00:23:56.502Z",
+    "updatedAt": "2024-12-05T00:23:56.502Z"
+  }
+]
+```
+
+#### Get Stock by Symbol with AI Analysis
 ```bash
 curl -X GET http://localhost:5001/api/stocks/symbol/AAPL \
-  -H "Authorization: Bearer <token>"
+  -H "Authorization: Bearer your_jwt_token"
 ```
 
-Example Response:
-
+Response:
 ```json
 {
+  "id": 1,
+  "userId": 1,
   "symbol": "AAPL",
   "name": "Apple Inc",
   "quantity": 10,
-  "purchasePrice": 150.50,
-  "currentPrice": 175.25,
+  "averagePrice": 243.01,
+  "currentPrice": 243.01,
   "industry": "Technology",
-  "lastUpdated": "2024-03-14T10:30:00Z",
-  "aiAnalysis": "Detailed AI-powered analysis of AAPL stock performance and future outlook..."
-}
-```
-
-#### Get Stock Details with AI Analysis
-
-```bash
-curl -X GET http://localhost:5001/api/stocks/symbol/AAPL/analysis \
-  -H "Authorization: Bearer <token>"
-```
-
-Example Response:
-
-```json
-{
-  "symbol": "AAPL",
-  "name": "Apple Inc",
-  "quantity": 10,
-  "purchasePrice": 150.50,
-  "currentPrice": 175.25,
-  "industry": "Technology",
-  "lastUpdated": "2024-03-14T10:30:00Z",
-  "aiAnalysis": "Detailed AI-powered analysis of AAPL stock performance and future outlook..."
+  "lastUpdated": "2024-12-05T00:25:01.000Z",
+  "createdAt": "2024-12-05T00:23:56.502Z",
+  "updatedAt": "2024-12-05T00:25:01.001Z",
+  "aiAnalysis": "As a financial advisor, here is a brief analysis of the stock AAPL (Apple Inc.):\n\nKey Performance Indicators:\n- Revenue growth: AAPL has consistently reported strong revenue growth..."
 }
 ```
 
@@ -234,55 +213,67 @@ Example Response:
 
 ```bash
 curl -X GET http://localhost:5001/api/stocks/analyze/portfolio \
-  -H "Authorization: Bearer <token>"
+  -H "Authorization: Bearer your_jwt_token"
 ```
 
 Example Response:
 
 ```json
 {
-  "totalValue": 1905.00,
-  "totalInvestment": 1805.00,
-  "totalProfitLoss": 100.00,
-  "profitLossPercentage": 5.54,
   "stocks": [
     {
+      "id": 1,
+      "userId": 1,
       "symbol": "AAPL",
       "name": "Apple Inc",
       "quantity": 10,
-      "averagePrice": 180.50,
-      "currentPrice": 190.50,
-      "value": 1905.00,
-      "profitLoss": 100.00,
-      "profitLossPercentage": 5.54
+      "averagePrice": 243.01,
+      "currentPrice": 243.01,
+      "industry": "Technology",
+      "lastUpdated": "2024-12-05T00:26:17.532Z",
+      "createdAt": "2024-12-05T00:23:56.502Z",
+      "updatedAt": "2024-12-05T00:26:17.532Z",
+      "currentValue": 2430.1,
+      "profitLoss": null,
+      "profitLossPercentage": null
+    },
+    {
+      "id": 2,
+      "userId": 1,
+      "symbol": "MSFT",
+      "name": "Microsoft Corp",
+      "quantity": 5,
+      "averagePrice": 437.42,
+      "currentPrice": 437.42,
+      "industry": "Technology",
+      "lastUpdated": "2024-12-05T00:26:17.648Z",
+      "createdAt": "2024-12-05T00:25:55.336Z",
+      "updatedAt": "2024-12-05T00:26:17.648Z",
+      "currentValue": 2187.1,
+      "profitLoss": null,
+      "profitLossPercentage": null
     }
   ],
-  "aiAnalysis": "Comprehensive AI analysis of portfolio diversification, risk assessment, and recommendations..."
+  "summary": {
+    "totalValue": 4617.2,
+    "totalInvestment": null,
+    "totalProfitLoss": null,
+    "totalProfitLossPercentage": null
+  },
+  "aiAnalysis": "As a financial advisor, here's a brief analysis of the provided portfolio:\n\nDiversification:\nThe portfolio consists of only two stocks, Apple (AAPL) and Microsoft (MSFT)..."
 }
 ```
 
 #### Clear Portfolio
-
 ```bash
 curl -X DELETE http://localhost:5001/api/stocks/clear \
-  -H "Authorization: Bearer <token>"
+  -H "Authorization: Bearer your_jwt_token"
 ```
 
-Example Response:
-
+Response:
 ```json
 {
-  "message": "Portfolio cleared successfully"
-}
-```
-
-### Error Responses
-
-Example of an error response:
-
-```json
-{
-  "error": "Authentication required"
+  "message": "All stocks have been cleared from the database"
 }
 ```
 
@@ -349,16 +340,16 @@ Response:
 ```json
 {
   "id": 1,
+  "userId": 1,
   "symbol": "AAPL",
   "name": "Apple Inc",
   "quantity": 10,
-  "purchasePrice": 175.25,
-  "currentPrice": 175.25,
+  "averagePrice": 243.01,
+  "currentPrice": 243.01,
   "industry": "Technology",
-  "lastUpdated": "2024-03-14T10:30:00Z",
-  "userId": 1,
-  "createdAt": "2024-03-14T10:30:00Z",
-  "updatedAt": "2024-03-14T10:30:00Z"
+  "lastUpdated": "2024-12-05T00:23:56.502Z",
+  "createdAt": "2024-12-05T00:23:56.502Z",
+  "updatedAt": "2024-12-05T00:23:56.502Z"
 }
 ```
 
@@ -379,16 +370,16 @@ Response:
 ```json
 {
   "id": 2,
+  "userId": 1,
   "symbol": "MSFT",
   "name": "Microsoft Corp",
   "quantity": 5,
-  "purchasePrice": 175.25,
-  "currentPrice": 175.25,
+  "averagePrice": 437.42,
+  "currentPrice": 437.42,
   "industry": "Technology",
-  "lastUpdated": "2024-03-14T10:30:00Z",
-  "userId": 1,
-  "createdAt": "2024-03-14T10:30:00Z",
-  "updatedAt": "2024-03-14T10:30:00Z"
+  "lastUpdated": "2024-12-05T00:26:17.648Z",
+  "createdAt": "2024-12-05T00:25:55.336Z",
+  "updatedAt": "2024-12-05T00:26:17.648Z"
 }
 ```
 
@@ -409,9 +400,12 @@ Response:
     "symbol": "AAPL",
     "name": "Apple Inc",
     "quantity": 10,
-    "averagePrice": 180.50,
-    "createdAt": "2024-11-29T02:03:11.426Z",
-    "updatedAt": "2024-11-29T02:03:11.426Z"
+    "averagePrice": 243.01,
+    "currentPrice": 243.01,
+    "industry": "Technology",
+    "lastUpdated": "2024-12-05T00:23:56.502Z",
+    "createdAt": "2024-12-05T00:23:56.502Z",
+    "updatedAt": "2024-12-05T00:23:56.502Z"
   },
   {
     "id": 2,
@@ -419,9 +413,12 @@ Response:
     "symbol": "MSFT",
     "name": "Microsoft Corp",
     "quantity": 5,
-    "averagePrice": 370.50,
-    "createdAt": "2024-11-29T02:03:24.855Z",
-    "updatedAt": "2024-11-29T02:03:24.855Z"
+    "averagePrice": 437.42,
+    "currentPrice": 437.42,
+    "industry": "Technology",
+    "lastUpdated": "2024-12-05T00:26:17.648Z",
+    "createdAt": "2024-12-05T00:25:55.336Z",
+    "updatedAt": "2024-12-05T00:26:17.648Z"
   }
 ]
 ```
@@ -437,14 +434,18 @@ Response:
 
 ```json
 {
+  "id": 1,
+  "userId": 1,
   "symbol": "AAPL",
   "name": "Apple Inc",
   "quantity": 10,
-  "purchasePrice": 150.50,
-  "currentPrice": 175.25,
+  "averagePrice": 243.01,
+  "currentPrice": 243.01,
   "industry": "Technology",
-  "lastUpdated": "2024-03-14T10:30:00Z",
-  "aiAnalysis": "Detailed AI-powered analysis of AAPL stock performance and future outlook..."
+  "lastUpdated": "2024-12-05T00:25:01.000Z",
+  "createdAt": "2024-12-05T00:23:56.502Z",
+  "updatedAt": "2024-12-05T00:25:01.001Z",
+  "aiAnalysis": "As a financial advisor, here is a brief analysis of the stock AAPL (Apple Inc.):\n\nKey Performance Indicators:\n- Revenue growth: AAPL has consistently reported strong revenue growth, driven by the success of its iPhone, iPad, and Mac product lines, as well as its growing services business.\n- Profitability: The company maintains high profit margins, with a net profit margin consistently above 20% in recent years.\n- Cash flow: AAPL generates substantial free cash flow, which allows it to invest in R&D, make strategic acquisitions, and return capital to shareholders through share buybacks and dividends.\n- Balance sheet: The company has a very strong balance"
 }
 ```
 
@@ -462,34 +463,44 @@ Response:
   "stocks": [
     {
       "id": 1,
+      "userId": 1,
       "symbol": "AAPL",
       "name": "Apple Inc",
       "quantity": 10,
-      "averagePrice": 180.50,
-      "currentPrice": 189.95,
-      "value": 1899.50,
-      "profitLoss": 94.50,
-      "profitLossPercentage": 5.23
+      "averagePrice": 243.01,
+      "currentPrice": 243.01,
+      "industry": "Technology",
+      "lastUpdated": "2024-12-05T00:26:17.532Z",
+      "createdAt": "2024-12-05T00:23:56.502Z",
+      "updatedAt": "2024-12-05T00:26:17.532Z",
+      "currentValue": 2430.1,
+      "profitLoss": null,
+      "profitLossPercentage": null
     },
     {
       "id": 2,
+      "userId": 1,
       "symbol": "MSFT",
       "name": "Microsoft Corp",
       "quantity": 5,
-      "averagePrice": 370.50,
-      "currentPrice": 378.85,
-      "value": 1894.25,
-      "profitLoss": 41.75,
-      "profitLossPercentage": 2.25
+      "averagePrice": 437.42,
+      "currentPrice": 437.42,
+      "industry": "Technology",
+      "lastUpdated": "2024-12-05T00:26:17.648Z",
+      "createdAt": "2024-12-05T00:25:55.336Z",
+      "updatedAt": "2024-12-05T00:26:17.648Z",
+      "currentValue": 2187.1,
+      "profitLoss": null,
+      "profitLossPercentage": null
     }
   ],
   "summary": {
-    "totalValue": 3793.75,
-    "totalInvestment": 3657.50,
-    "totalProfitLoss": 136.25,
-    "totalProfitLossPercentage": 3.72
+    "totalValue": 4617.2,
+    "totalInvestment": null,
+    "totalProfitLoss": null,
+    "totalProfitLossPercentage": null
   },
-  "aiAnalysis": "Comprehensive AI analysis of portfolio diversification, risk assessment, and recommendations..."
+  "aiAnalysis": "As a financial advisor, here's a brief analysis of the provided portfolio:\n\nDiversification:\nThe portfolio consists of only two stocks, Apple (AAPL) and Microsoft (MSFT), which represents a relatively concentrated position. Ideally, a well-diversified portfolio should include a broader range of asset classes and sectors to mitigate the risk of overexposure to a specific industry or company.\n\nRisk Assessment:\nThe portfolio is heavily weighted towards the technology sector, as both AAPL and MSFT are technology companies. This concentration increases the portfolio's sensitivity to fluctuations in the tech industry, which could lead to higher volatility and risk compared to a more diversified portfolio.\n\nWhile AAPL and MSFT are large, well-established companies with a history of strong performance, they are still subject to market and company-specific risks."
 }
 ```
 
@@ -504,7 +515,7 @@ Response:
 
 ```json
 {
-  "message": "Portfolio cleared successfully"
+  "message": "All stocks have been cleared from the database"
 }
 ```
 
