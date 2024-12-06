@@ -90,8 +90,11 @@ return (
     
     {/* Header */}
     <div className="text-center">
-      <h1 className="text-4xl font-extrabold tracking-wide">Full Portfolio</h1>
-      <p className="text-lg text-white mt-2">Track and manage your investments effortlessly.</p>
+      <h1 className="text-4xl font-extrabold tracking-wide">Portfolio</h1>
+      <p className="text-lg text-white my-2 mb-8">Track and manage your investments effortlessly.</p>
+      <Link href='/analyzePortfolio' className='px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-500 transition-all'
+      >Analyze Portfolio
+      </Link>
     </div>
 
     {/* Search and Learn More Button */}
