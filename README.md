@@ -11,7 +11,7 @@ A Node.js application for tracking and analyzing your stock portfolio with real-
 - Detailed portfolio performance metrics
 - Intelligent investment recommendations
 - SQLite database for easy setup and portability
-- End-to-end encryption for sensitive stock data (quantities and prices)
+- Encryption for sensitive stock data (quantities and prices)
 
 ## Prerequisites
 
