@@ -41,6 +41,10 @@ const AnalyzePortfolio = () => {
       };
 
     useEffect(() => {
+        if (!JWT) {
+            router.push("/"); // reroute back to the index if within an invalid session
+        }
+
         const fetchPortfolioData = async () => {
         try {
             const response = await fetch('http://127.0.0.1:5001/api/stocks/analyze/portfolio', {
