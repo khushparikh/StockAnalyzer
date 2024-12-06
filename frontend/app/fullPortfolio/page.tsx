@@ -30,7 +30,7 @@ const PortfolioPage = () => {
       method: 'GET',
       headers: {
           'Content-type': 'application/json; charset=UTF-8',
-          'Authorization': `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImlhdCI6MTczMzQ2MjE3MiwiZXhwIjoxNzMzNDYyMzUyfQ.jZ-QZ8pJRdIXxWpSv4W4-jKi_yG5N8vL8KwJopxcFhU`,
+          'Authorization': `Bearer ${JWT}`,
       },
     })
     .then((res) => {
@@ -59,7 +59,7 @@ const PortfolioPage = () => {
     }),
       headers: {
           'Content-type': 'application/json; charset=UTF-8',
-          'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImlhdCI6MTczMzQ2MjE3MiwiZXhwIjoxNzMzNDYyMzUyfQ.jZ-QZ8pJRdIXxWpSv4W4-jKi_yG5N8vL8KwJopxcFhU'
+          'Authorization': `Bearer ${JWT}`,
       },
     })
     .then((res) => {   
@@ -86,7 +86,7 @@ const PortfolioPage = () => {
       method: 'POST',
       headers: {
           'Content-type': 'application/json; charset=UTF-8',
-          'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImlhdCI6MTczMzQ2MjE3MiwiZXhwIjoxNzMzNDYyMzUyfQ.jZ-QZ8pJRdIXxWpSv4W4-jKi_yG5N8vL8KwJopxcFhU'
+          'Authorization': `Bearer ${JWT}`,
       },
     })
     .then((res) => {   
