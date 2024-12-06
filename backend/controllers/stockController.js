@@ -216,7 +216,7 @@ async function analyzeStockWithClaude(stockSymbol) {
     const prompt = `You are a financial advisor. Provide a brief analysis of the stock ${stockSymbol}, focusing on key performance indicators and current market position. Keep it concise.`;
     const response = await anthropicClient.messages.create({
       model: 'claude-3-haiku-20240307',
-      max_tokens: 150,
+      max_tokens: 3000,
       temperature: 0.7,
       messages: [
         { role: 'user', content: prompt }
@@ -240,7 +240,7 @@ async function analyzePortfolioWithClaude(stocks) {
     
     const response = await anthropicClient.messages.create({
       model: 'claude-3-haiku-20240307',
-      max_tokens: 200,
+      max_tokens: 3000,
       temperature: 0.7,
       messages: [
         { role: 'user', content: prompt }
@@ -253,3 +253,22 @@ async function analyzePortfolioWithClaude(stocks) {
     return 'Unable to generate portfolio analysis at this time.';
   }
 }
+
+// Delete a stock by symbol
+exports.deleteStockBySymbol = async (req, res) => {
+  try {
+    const { symbol } = req.params;
+    const userId = req.user.id; // Assuming authentication middleware sets req.user
+
+    const stock = await Stock.findOne({ where: { symbol: symbol.toUpperCase(), userId } });
+
+    if (!stock) {
+      return res.status(404).json({ message: 'Stock not found in your portfolio' });
+    }
+
+    await stock.destroy();
+    res.json({ message: 'Stock deleted successfully' });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
