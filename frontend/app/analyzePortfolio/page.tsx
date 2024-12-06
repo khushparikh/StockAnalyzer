@@ -64,6 +64,58 @@ const AnalyzePortfolio = () => {
       return <p className="text-center mt-4">Loading portfolio data...</p>;
     }
 
+    // Utility function to calculate sum of current values by industry
+const calculateIndustryDistribution = (stocks: Stock[]) => {
+    const industryValues: { [key: string]: number } = {};
+  
+    stocks.forEach((stock) => {
+      if (industryValues[stock.industry]) {
+        industryValues[stock.industry] += stock.currentValue;
+      } else {
+        industryValues[stock.industry] = stock.currentValue;
+      }
+    });
+  
+    return {
+      labels: Object.keys(industryValues),
+      data: Object.values(industryValues),
+    };
+  };
+  
+  // Chart Data Preparation
+  const portfolioComposition = {
+    labels: portfolioData.stocks.map((stock: Stock) => stock.symbol),
+    datasets: [
+      {
+        data: portfolioData.stocks.map((stock: Stock) => stock.currentValue),
+        backgroundColor: ['#4caf50', '#ff7043'], // Add more colors if needed
+      },
+    ],
+  };
+  
+  const stockValuesComparison = {
+    labels: portfolioData.stocks.map((stock: Stock) => stock.symbol),
+    datasets: [
+      {
+        label: 'Current Value',
+        data: portfolioData.stocks.map((stock: Stock) => stock.currentValue),
+        backgroundColor: ['#4caf50', '#ff7043'], // Add more colors for each bar if needed
+      },
+    ],
+  };
+  
+  // Get industry distribution data
+  const industryData = calculateIndustryDistribution(portfolioData.stocks);
+  
+  const industryDistribution = {
+    labels: industryData.labels,
+    datasets: [
+      {
+        data: industryData.data,
+        backgroundColor: ['#4caf50', '#ff7043', '#42a5f5'], // Add more colors for additional industries
+      },
+    ],
+  };
     return (
         <div className="p-8 bg-gray-100 min-h-screen">
           <h1 className="text-3xl font-bold text-center mb-6">Portfolio Analysis</h1>
