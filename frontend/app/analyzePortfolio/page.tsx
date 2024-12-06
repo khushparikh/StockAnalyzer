@@ -18,138 +18,160 @@ interface Stock {
   updatedAt: string;
   currentValue: number;
   profitLoss: boolean;
-  profitLossPercent: number|boolean;
+  profitLossPercent: number | boolean;
 }
 
 interface Summary {
   totalValue: number;
-  totalInvestment: number|boolean;
-  totalProfitLoss: number|boolean;
-  totalProfitLossPercent: number|boolean;
+  totalInvestment: number | boolean;
+  totalProfitLoss: number | boolean;
+  totalProfitLossPercent: number | boolean;
 }
 
 const AnalyzePortfolio = () => {
     const [portfolioData, setPortfolioData] = useState<any>(null);
     const [error, setError] = useState<string>('');
-  
+
     useEffect(() => {
-      const fetchPortfolioData = async () => {
+        const fetchPortfolioData = async () => {
         try {
-          //const token = localStorage.getItem('token');
-          const response = await fetch('http://127.0.0.1:5001/api/stocks/analyze/portfolio', {
+            const response = await fetch('http://127.0.0.1:5001/api/stocks/analyze/portfolio', {
             method: 'GET',
             headers: {
-              Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImlhdCI6MTczMzQ0NTQ5OSwiZXhwIjoxNzMzNDQ1Njc5fQ.FnCNdjorq8WoPxjOxUl0vvWU10dGMbs-grv21O8vo3s`,
-              'Content-Type': 'application/json',
+                Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImlhdCI6MTczMzQ2NjUxOCwiZXhwIjoxNzMzNDY2Njk4fQ.rCW6rhwD7PrslpkPfBCeEswtyxrL4IVmI0Mgj2DJUwQ`,
+                'Content-Type': 'application/json',
             },
-          });
-  
-          if (!response.ok) {
-            throw new Error('Failed to fetch portfolio data');
-          }
-  
-          const data = await response.json();
-          setPortfolioData(data);
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to fetch portfolio data');
+            }
+
+            const data = await response.json();
+            setPortfolioData(data);
+            console.log(data.aiAnalysis)
         } catch (err: any) {
-          setError(err.message);
+            setError(err.message);
         }
-      };
-  
-      fetchPortfolioData();
+        };
+
+        fetchPortfolioData();
     }, []);
-  
+
     if (error) {
-      return <p className="text-red-500 text-center mt-4">{error}  999</p>;
+        return <p className="text-red-500 text-center mt-4">{error}</p>;
     }
-  
+
     if (!portfolioData) {
-      return <p className="text-center mt-4">Loading portfolio data...</p>;
+        return <p className="text-center mt-4 text-gray-500">Loading portfolio data...</p>;
     }
 
     // Utility function to calculate sum of current values by industry
     const calculateIndustryDistribution = (stocks: Stock[]) => {
-    const industryValues: { [key: string]: number } = {};
-  
-    stocks.forEach((stock) => {
-      if (industryValues[stock.industry]) {
-        industryValues[stock.industry] += stock.currentValue;
-      } else {
-        industryValues[stock.industry] = stock.currentValue;
-      }
-    });
-  
-    return {
-      labels: Object.keys(industryValues),
-      data: Object.values(industryValues),
+        const industryValues: { [key: string]: number } = {};
+
+        stocks.forEach((stock) => {
+        if (industryValues[stock.industry]) {
+            industryValues[stock.industry] += stock.currentValue;
+        } else {
+            industryValues[stock.industry] = stock.currentValue;
+        }
+        });
+
+        return {
+        labels: Object.keys(industryValues),
+        data: Object.values(industryValues),
+        };
     };
-  };
-  
-  // Chart Data Preparation
-  const portfolioComposition = {
-    labels: portfolioData.stocks.map((stock: Stock) => stock.symbol),
-    datasets: [
-      {
-        data: portfolioData.stocks.map((stock: Stock) => stock.currentValue),
-        backgroundColor: ['#4caf50', '#ff7043'],
-      },
-    ],
-  };
-  
-  const stockValuesComparison = {
-    labels: portfolioData.stocks.map((stock: Stock) => stock.symbol),
-    datasets: [
-      {
-        label: 'Current Value',
-        data: portfolioData.stocks.map((stock: Stock) => stock.currentValue),
-        backgroundColor: ['#4caf50', '#ff7043'],
-      },
-    ],
-  };
-  
-  // Get industry distribution data
-  const industryData = calculateIndustryDistribution(portfolioData.stocks);
-  
-  const industryDistribution = {
-    labels: industryData.labels,
-    datasets: [
-      {
-        data: industryData.data,
-        backgroundColor: ['#4caf50', '#ff7043', '#42a5f5'], // Add more colors for additional industries
-      },
-    ],
-  };
-  return (
-    <div className="p-8 bg-gray-100 min-h-screen">
-      <h1 className="text-3xl font-bold text-center mb-6">Portfolio Analysis</h1>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
-        <div className="bg-white shadow-md rounded-lg p-6">
-          <h2 className="text-xl font-semibold mb-4 text-center">Portfolio Composition</h2>
-          <Pie data={portfolioComposition} />
-        </div>
-        <div className="bg-white shadow-md rounded-lg p-6">
-          <h2 className="text-xl font-semibold mb-4 text-center">Stock Values Comparison</h2>
-          <Bar data={stockValuesComparison} />
-        </div>
-        <div className="bg-white shadow-md rounded-lg p-6">
-          <h2 className="text-xl font-semibold mb-4 text-center">Industry Distribution</h2>
-          <Pie data={industryDistribution} />
-        </div>
-      </div>
 
-      <div className="bg-white shadow-md rounded-lg p-6 mb-6">
-        <h2 className="text-2xl font-semibold mb-4">Portfolio Summary</h2>
-        <p className="text-lg">
-          <strong>Total Value:</strong> ${portfolioData.summary.totalValue.toFixed(2)}
-        </p>
-      </div>
+    const baseColors = ['#2563eb', '#4f83ff', '#ff8c42', '#2da3a6', '#9b59b6'];
 
-      <div className="bg-white shadow-md rounded-lg p-6">
-        <h2 className="text-2xl font-semibold mb-4">AI Analysis</h2>
-        <p className="italic">{portfolioData.aiAnalysis}</p>
-      </div>
-    </div>
-  );
+    const generateColors = (length: number) => {
+        return Array.from({ length }, (_, i) => baseColors[i % baseColors.length]);
+    };
+
+    const colors = generateColors(portfolioData.stocks.length);
+    // Chart Data Preparation
+    const portfolioComposition = {
+        labels: portfolioData.stocks.map((stock: Stock) => stock.symbol),
+        datasets: [
+            {
+                data: portfolioData.stocks.map((stock: Stock) => stock.currentValue),
+                backgroundColor: generateColors(portfolioData.stocks.length),
+                borderColor: '#ffffff',
+                borderWidth: 1,
+            },
+        ],
+    };
+
+    const stockValuesComparison = {
+        labels: portfolioData.stocks.map((stock: Stock) => stock.symbol),
+        datasets: [
+            {
+                label: 'Current Value',
+                data: portfolioData.stocks.map((stock: Stock) => stock.currentValue),
+                backgroundColor: generateColors(portfolioData.stocks.length),
+                borderColor: '#ffffff',
+                borderWidth: 1,
+            },
+        ],
+    };
+
+    // Get industry distribution data
+    const industryData = calculateIndustryDistribution(portfolioData.stocks);
+
+    const industryDistribution = {
+        labels: industryData.labels,
+        datasets: [
+        {
+            data: industryData.data,
+            backgroundColor: generateColors(portfolioData.stocks.length),
+            borderColor: '#ffffff',
+            borderWidth: 1,
+        },
+        ],
+    };
+
+    return (
+        <div className="p-8 bg-gradient-to-br from-gray-900 via-gray-800 to-gray-700 text-white min-h-screen">
+        <h1 className="text-3xl font-bold text-center mb-6">Portfolio Analysis</h1>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
+            <div className="bg-gray-800 rounded-lg p-6 shadow-md">
+            <h2 className="text-xl font-semibold text-center text-white mb-4">Portfolio Composition</h2>
+            <Pie data={portfolioComposition} />
+            </div>
+            <div className="bg-gray-800 rounded-lg p-6 shadow-md">
+            <h2 className="text-xl font-semibold text-center text-white mb-4">Stock Values Comparison</h2>
+            <Bar data={stockValuesComparison} />
+            </div>
+            <div className="bg-gray-800 rounded-lg p-6 shadow-md">
+            <h2 className="text-xl font-semibold text-center text-white mb-4">Industry Distribution</h2>
+            <Pie data={industryDistribution} />
+            </div>
+        </div>
+
+        <div className="bg-gray-800 rounded-lg p-6 shadow-md mb-6">
+            <h2 className="text-2xl font-semibold text-white mb-4">Portfolio Summary</h2>
+            <p className="text-lg text-gray-500">
+            <strong>Total Value:</strong> ${portfolioData.summary.totalValue.toFixed(2)}
+            </p>
+        </div>
+
+        <div className="bg-gray-800 rounded-lg p-6 shadow-md">
+            <h2 className="text-2xl font-semibold text-white mb-4">AI Analysis</h2>
+            <p className="text-gray-500">
+            {portfolioData.aiAnalysis.split('\n').map((line: string, index: number) => (
+                <span key={index}>
+                {line}
+                <br />
+                </span>
+            ))}
+            </p>
+        </div>
+        </div>
+    );
 };
 
 export default AnalyzePortfolio;
