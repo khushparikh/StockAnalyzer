@@ -19,7 +19,7 @@ class SessionService {
 
     // Calculate expiration date
     const expiresAt = new Date();
-    expiresAt.setMinutes(expiresAt.getMinutes() + 3);
+    expiresAt.setMinutes(expiresAt.getMinutes() + 10);
 
     // Create session record
     const session = await Session.create({
