@@ -11,6 +11,7 @@ A Node.js application for tracking and analyzing your stock portfolio with real-
 - Detailed portfolio performance metrics
 - Intelligent investment recommendations
 - SQLite database for easy setup and portability
+- End-to-end encryption for sensitive stock data (quantities and prices)
 
 ## Prerequisites
 
@@ -33,6 +34,8 @@ stock-portfolio-tracker/
 │   ├── models/
 │   │   ├── Stock.js
 │   │   └── User.js
+│   ├── utils/
+│   │   └── encryption.js
 │   ├── routes/
 │   │   ├── stockRoutes.js
 │   │   └── userRoutes.js
@@ -75,33 +78,34 @@ DB_NAME=stock_portfolio
 DB_USER=your_db_user
 DB_PASSWORD=your_db_password
 DB_HOST=localhost
+ENCRYPTION_KEY=your_32_byte_encryption_key
 ```
 
-5. Start the backend development server:
+5. Generate a secure encryption key:
+
+```bash
+node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
+```
+
+6. Add the generated encryption key to your `.env` file
+
+7. Start the development server:
 
 ```bash
 npm run dev
 ```
 
-6. Open a new terminal, separate from the one running the backend development server
+## Security Features
 
-7. Navigate to the frontend directory
+### Data Encryption
+The application uses AES-256-CBC encryption to protect sensitive stock data:
+- Stock quantities
+- Average purchase prices
+- Current prices
 
-```bash
-cd frontend
-```
-
-8. Install dependencies:
-
-```bash
-npm install
-```
-
-9. Start the backend development server:
-
-```bash
-npm run dev
-```
+The encryption is transparent to API users - data is automatically:
+- Encrypted when saved to the database
+- Decrypted when retrieved through the API
 
 ## API Documentation
 
@@ -153,11 +157,10 @@ Example Response:
 All stock endpoints require authentication. Replace `your_jwt_token` with your actual JWT token.
 
 #### Add a Stock
-
 ```bash
 curl -X POST http://localhost:5001/api/stocks/add \
   -H "Content-Type: application/json" \
-  -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImlhdCI6MTczMzM5MDc4MSwiZXhwIjoxNzMzNDc3MTgxfQ.beoE3EfM3TSj9x55R6GWAT7rVGk09ftEhrn3jgdPjDg" \
+  -H "Authorization: Bearer your_jwt_token" \
   -d '{
     "symbol": "AAPL",
     "quantity": 10
@@ -165,7 +168,6 @@ curl -X POST http://localhost:5001/api/stocks/add \
 ```
 
 Response:
-
 ```json
 {
   "id": 1,
@@ -183,14 +185,12 @@ Response:
 ```
 
 #### Get All Stocks
-
 ```bash
 curl -X GET http://localhost:5001/api/stocks \
   -H "Authorization: Bearer your_jwt_token"
 ```
 
 Response:
-
 ```json
 [
   {
@@ -207,17 +207,16 @@ Response:
     "updatedAt": "2024-12-05T00:23:56.502Z"
   }
 ]
+
 ```
 
 #### Get Stock by Symbol with AI Analysis
-
 ```bash
 curl -X GET http://localhost:5001/api/stocks/symbol/AAPL \
   -H "Authorization: Bearer your_jwt_token"
 ```
 
 Response:
-
 ```json
 {
   "id": 1,
@@ -291,14 +290,12 @@ Example Response:
 ```
 
 #### Clear Portfolio
-
 ```bash
 curl -X DELETE http://localhost:5001/api/stocks/clear \
   -H "Authorization: Bearer your_jwt_token"
 ```
 
 Response:
-
 ```json
 {
   "message": "All stocks have been cleared from the database"
@@ -356,7 +353,7 @@ Response:
 # Replace <token> with the JWT token received from login
 curl -X POST http://localhost:5001/api/stocks/add \
   -H "Content-Type: application/json" \
-  -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImlhdCI6MTczMzQ2Mjk4OCwiZXhwIjoxNzMzNTQ5Mzg4fQ.czjhTgjF-2bK2H9J8TO3nbTTcj-q7YTyqYwLmfibj1o" \
+  -H "Authorization: Bearer <token>" \
   -d '{
     "symbol": "AAPL",
     "quantity": 10
