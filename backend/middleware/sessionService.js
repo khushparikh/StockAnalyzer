@@ -14,7 +14,7 @@ class SessionService {
     const token = jwt.sign(
       { userId },
       process.env.JWT_SECRET,
-      { expiresIn: '3m' }
+      { expiresIn: '10m' }
     );
 
     // Calculate expiration date
