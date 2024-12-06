@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import { Pie, Bar } from 'react-chartjs-2';
 import 'chart.js/auto';
+import { useRouter } from 'next/navigation';
 
 interface Stock {
   id: number;
@@ -31,6 +32,11 @@ interface Summary {
 const AnalyzePortfolio = () => {
     const [portfolioData, setPortfolioData] = useState<any>(null);
     const [error, setError] = useState<string>('');
+    const router = useRouter();
+
+    const handleBackSelection = () => {
+        router.push('/fullPortfolio');
+      };
 
     useEffect(() => {
         const fetchPortfolioData = async () => {
@@ -169,6 +175,15 @@ const AnalyzePortfolio = () => {
                 ))}
                 </p>
             </div>
+
+            <div className="flex justify-center mt-6">
+            <button
+              onClick={handleBackSelection}
+              className="px-8 py-3 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-500 transition-all duration-300 ease-in-out transform hover:scale-105"
+            >
+              Back to Portfolio
+            </button>
+          </div>
         </div>
     );
 };
