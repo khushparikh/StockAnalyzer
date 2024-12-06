@@ -110,7 +110,7 @@ const AnalyzePortfolio = () => {
                 backgroundColor: generateColors(portfolioData.stocks.length),
                 borderColor: '#ffffff',
                 borderWidth: 1,
-            },
+            }
         ],
     };
 
@@ -149,28 +149,71 @@ const AnalyzePortfolio = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
                 <div className="bg-gray-800 rounded-lg p-6 shadow-md">
                 <h2 className="text-xl font-semibold text-center text-white mb-4">Portfolio Composition</h2>
-                <Pie data={portfolioComposition} />
+                <Pie 
+                    data={portfolioComposition} 
+                    options={{
+                        plugins: {
+                            legend: {
+                                labels: {
+                                    color: 'white'
+                                }
+                            }   
+                        }
+                    }}
+                />
                 </div>
                 <div className="bg-gray-800 rounded-lg p-6 shadow-md">
                 <h2 className="text-xl font-semibold text-center text-white mb-4">Stock Values Comparison</h2>
-                <Bar data={stockValuesComparison} />
+                <Bar 
+                    data={stockValuesComparison} 
+                    options={{
+                        plugins: {
+                        legend: {
+                            labels: { color: 'white' },
+                        },
+                        tooltip: {
+                            bodyColor: 'white',
+                            titleColor: 'white',
+                        },
+                        },
+                        scales: {
+                        x: {
+                            ticks: { color: 'white' },
+                        },
+                        y: {
+                            ticks: { color: 'white' },
+                        },
+                        },
+                    }}
+                />
                 </div>
                 <div className="bg-gray-800 rounded-lg p-6 shadow-md">
                 <h2 className="text-xl font-semibold text-center text-white mb-4">Industry Distribution</h2>
-                <Pie data={industryDistribution} />
+                <Pie 
+                    data={industryDistribution} 
+                    options={{
+                        plugins: {
+                            legend: {
+                                labels: {
+                                    color: 'white'
+                                }
+                            }   
+                        }
+                    }}
+                />
                 </div>
             </div>
 
             <div className="bg-gray-800 rounded-lg p-6 shadow-md mb-6">
                 <h2 className="text-2xl font-semibold text-white mb-4">Portfolio Summary</h2>
-                <p className="text-lg text-gray-500">
+                <p className="text-lg text-gray-300">
                 <strong>Total Value:</strong> ${portfolioData.summary.totalValue.toFixed(2)}
                 </p>
             </div>
 
             <div className="bg-gray-800 rounded-lg p-6 shadow-md">
                 <h2 className="text-2xl font-semibold text-white mb-4">AI Analysis</h2>
-                <p className="text-gray-500 whitespace-normal leading-relaxed overflow-visible">
+                <p className="text-gray-300 whitespace-normal leading-relaxed overflow-visible">
                 {portfolioData.aiAnalysis.split('\n').map((line: string, index: number) => (
                     <span key={index}>
                     {line}
