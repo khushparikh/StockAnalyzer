@@ -57,10 +57,9 @@ const AnalyzePortfolio = () => {
 
             const data = await response.json();
             setPortfolioData(data);
-            console.log(data)
         } catch (err: any) {
             setError(err.message);
-            router.push('/analyzePortfolio');
+            router.push('/fullPortfolio'); // Reroute to fullPortfolio if something goes wrong with the fetch
         }
         };
 
