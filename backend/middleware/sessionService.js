@@ -14,12 +14,12 @@ class SessionService {
     const token = jwt.sign(
       { userId },
       process.env.JWT_SECRET,
-      { expiresIn: '20m' }
+      { expiresIn: '24h' }
     );
 
     // Calculate expiration date
     const expiresAt = new Date();
-    expiresAt.setMinutes(expiresAt.getMinutes() + 20);
+    expiresAt.setMinutes(expiresAt.getMinutes() + 1440);
 
     // Create session record
     const session = await Session.create({
