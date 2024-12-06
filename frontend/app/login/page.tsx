@@ -2,12 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from 'next/navigation';
-import { after } from "node:test";
 
-interface PostData {
-    email: string;
-    password: string;
-};
 
 
 
