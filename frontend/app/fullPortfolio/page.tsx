@@ -17,6 +17,8 @@ interface Stock {
 }
 
 const PortfolioPage = () => {
+  const router = useRouter();
+
   // const [stockData, setStockData] = useState<Stock[]>([]);
   // const [loading, setLoading] = useState(true);
   // const [error, setError] = useState<string | null>(null);
@@ -30,7 +32,7 @@ const PortfolioPage = () => {
       method: 'GET',
       headers: {
           'Content-type': 'application/json; charset=UTF-8',
-          'Authorization': `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImlhdCI6MTczMzQzODYyNywiZXhwIjoxNzMzNTI1MDI3fQ.l5TRjcKfHemO0uTFCK3ZhsX_0oxGr4arhxNYI0a7IZU`,
+          'Authorization': `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImlhdCI6MTczMzQ2MjE3MiwiZXhwIjoxNzMzNDYyMzUyfQ.jZ-QZ8pJRdIXxWpSv4W4-jKi_yG5N8vL8KwJopxcFhU`,
       },
     })
     .then((res) => {
@@ -61,7 +63,7 @@ const PortfolioPage = () => {
     }),
       headers: {
           'Content-type': 'application/json; charset=UTF-8',
-          'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImlhdCI6MTczMzQzODYyNywiZXhwIjoxNzMzNTI1MDI3fQ.l5TRjcKfHemO0uTFCK3ZhsX_0oxGr4arhxNYI0a7IZU'
+          'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImlhdCI6MTczMzQ2MjE3MiwiZXhwIjoxNzMzNDYyMzUyfQ.jZ-QZ8pJRdIXxWpSv4W4-jKi_yG5N8vL8KwJopxcFhU'
       },
     })
     .then((res) => {   
@@ -80,6 +82,41 @@ const PortfolioPage = () => {
        alert('Failed to add stock. Please try again.');
     }); 
   }
+
+  const handleLogout = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+
+    fetch(`http://127.0.0.1:5001/api/users/logout`, {
+      method: 'POST',
+      headers: {
+          'Content-type': 'application/json; charset=UTF-8',
+          'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImlhdCI6MTczMzQ2MjE3MiwiZXhwIjoxNzMzNDYyMzUyfQ.jZ-QZ8pJRdIXxWpSv4W4-jKi_yG5N8vL8KwJopxcFhU'
+      },
+    })
+    .then((res) => {   
+      if (!res.ok) {
+        throw new Error('Failed to logout. Please try again: ' + res.statusText)
+      }
+      return res.json();
+    })
+    .then((data) => {
+      router.push('/')
+    })
+    .catch((err) => {
+       console.log(err.message);
+       alert('Failed to logout. Please try again.');
+    });
+  }
+
+  const handleRemoveStock = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault
+
+    // delete fetch
+
+
+
+
+  }
  
   useEffect(() => {
     fetchStockData();
@@ -87,7 +124,17 @@ const PortfolioPage = () => {
 
 return (
   <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-700 text-white px-6 py-8">
+    <div className="flex justify-end">
+      <button 
+        className="px-6 py-3 bg-red-600 text-white font-semibold rounded-lg shadow-md hover:bg-red-500 transition-all"
+        onClick={(e) => handleLogout(e)}
+      >LOGOUT
+      </button>
+    </div>
     
+    
+
+
     {/* Header */}
     <div className="text-center">
       <h1 className="text-4xl font-extrabold tracking-wide">Portfolio</h1>
@@ -127,25 +174,33 @@ return (
 
   {/* Stock List */}
   {stock.map((stock, index) => (
-    <Link 
-      key={index}
-      href={{
-        pathname: "/analyzeStock",
-        query: { symbol: stock.symbol }
-      }}
-      className="block"
-    >
-      <div className="flex justify-between items-center bg-gray-800 p-6 rounded-lg shadow-lg transition-all duration-300 hover:scale-105 hover:shadow-xl">
-        <div>
-          <h2 className="text-2xl font-bold text-white">{stock.symbol}</h2>
-          <p className="text-gray-400 text-sm mt-1">{stock.description}</p>
+    <div className='flex' key={index}>
+      <Link 
+        href={{
+          pathname: "/analyzeStock",
+          query: { symbol: stock.symbol }
+        }}
+        className="block flex-grow"
+      >
+        <div className="flex justify-between items-center bg-gray-800 p-6 rounded-lg shadow-lg transition-all duration-300 hover:scale-105 hover:shadow-xl">
+          <div>
+            <h2 className="text-2xl font-bold text-white">{stock.symbol}</h2>
+            <p className="text-gray-400 text-sm mt-1">{stock.description}</p>
+          </div>
+          <div className="text-right">
+            <p className="text-lg font-semibold text-green-400">${stock.averagePrice.toFixed(2)}</p>
+            <p className="text-sm text-gray-500 mt-1">Quantity: {stock.quantity}</p>
+          </div>
         </div>
-        <div className="text-right">
-          <p className="text-lg font-semibold text-green-400">${stock.averagePrice.toFixed(2)}</p>
-          <p className="text-sm text-gray-500 mt-1">Quantity: {stock.quantity}</p>
-        </div>
-      </div>
-    </Link>      
+      </Link>
+      <button
+        className="w-1/7 h-1/2 ml-6 mr-4 px-3 my-6 align-middle bg-red-600 rounded-lg shadow-md hover:bg-red-500 transition-all aspect-square duration-300 hover:scale-105 hover:shadow-l"
+        onClick={(e) => handleRemoveStock(e)}
+        > <img src="/trashcan.svg" alt="Check Icon" className="w-6 h-6 aspect-square" />
+      </button>
+    </div>
+          
+          
       ))}
     </div>
 
