@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from 'next/navigation';
+import { after } from "node:test";
 
 interface PostData {
     email: string;
@@ -42,6 +43,7 @@ const Home = () => {
         })
          .then((data) => {
             const access_token = data.token;
+            sessionStorage.setItem("JWT", access_token);
             setPassword('');
             setEmail('');
             router.push('/fullPortfolio') // RE ROUTE TO NEXT PAGE --> Full portfolio
