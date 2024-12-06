@@ -19,7 +19,8 @@ interface Stock {
 const PortfolioPage = () => {
   const router = useRouter();
 
-  const JWT = sessionStorage.getItem('JWT');
+  const JWT = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImlhdCI6MTczMzQ3NzA3OSwiZXhwIjoxNzMzNDc4Mjc5fQ.dkyuIZaA1TECEB-cewtSXTuhdT3eyeyxXrRvDPXjbC8";
+  // sessionStorage.getItem('JWT');
   const [stock, setStock] = useState<Stock[]>([]);
   const [searchSymbol, setSearchSymbol] = useState("");
   const [addSymbol, setAddSymbol] = useState('');
@@ -105,12 +106,34 @@ const PortfolioPage = () => {
     });
   }
 
-  const handleRemoveStock = (e: React.MouseEvent<HTMLButtonElement>) => {
+  const handleRemoveStock = (e: React.MouseEvent<HTMLButtonElement>, stockSymbol: string) => {
     e.preventDefault
-
-    // delete fetch
-
-
+    console.log(stockSymbol);
+    fetch(`http://127.0.0.1:5001/api/stocks/symbol/${stockSymbol}`, {
+          method: 'DELETE',
+          headers: {
+              'Content-type': 'application/json; charset=UTF-8',
+              'Authorization': `Bearer ${JWT}`,
+          },
+        })
+        .then((res) => {   
+          if (!res.ok) {
+            if(res.status == 404){
+              throw new Error("Stock not found." + res.statusText);
+            }
+            else{
+              throw new Error("Failed to remove stock." + res.statusText);
+            }
+          }
+          return res.json();
+        })
+        .then((data) => {
+          fetchStockData();
+        })
+        .catch((err) => {
+          console.log(err.message);
+          alert('Failed to Remove Stock. Please try again.');
+        });
 
 
   }
@@ -188,7 +211,7 @@ return (
       </Link>
       <button
         className="w-1/7 h-1/2 ml-6 mr-4 px-3 my-6 align-middle bg-red-600 rounded-lg shadow-md hover:bg-red-500 transition-all aspect-square duration-300 hover:scale-105 hover:shadow-l"
-        onClick={(e) => handleRemoveStock(e)}
+        onClick={(e) => handleRemoveStock(e,stock.symbol)}
         > <img src="/trashcan.svg" alt="Check Icon" className="w-6 h-6 aspect-square" />
       </button>
     </div>
