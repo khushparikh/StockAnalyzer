@@ -71,7 +71,11 @@ const AnalyzePortfolio = () => {
     }
 
     if (!portfolioData) {
-        return <p className="text-center mt-4 text-gray-500">Loading portfolio data...</p>;
+        return (
+            <div className="flex align-middle justify-center bg-gradient-to-br from-gray-900 via-gray-800 to-gray-700 h-screen w-screen">
+                <p className="text-center text-white font-extrabold text-6xl my-auto ">Loading portfolio data...</p>
+            </div>
+        );
     }
 
     // Utility function to calculate sum of current values by industry
