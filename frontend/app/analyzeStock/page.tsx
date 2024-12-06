@@ -38,7 +38,7 @@ const AnalyzeStock = () => {
     }
 
     const fetchSingleStockData = async () => {
-      fetch(`http://localhost:5001/api/stocks/symbol/${symbol}`, {
+      fetch(`http://127.0.0.1:5001/api/stocks/symbol/${symbol}`, {
         method: 'GET',
         headers: {
             'Content-type': 'application/json; charset=UTF-8',
