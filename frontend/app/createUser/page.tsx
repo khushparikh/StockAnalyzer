@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 
 const Home = () => {
@@ -10,7 +10,6 @@ const Home = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
-    const [access_token, setAccessToken] = useState("");
 
     const passwordMatch = password !== "" && confirmPassword !== "" && password !== confirmPassword;
 
@@ -39,12 +38,9 @@ const Home = () => {
             return res.json();
         })
          .then((data) => {
-            console.log(data)
-            const access_token = data.token;
-            setAccessToken(access_token);
+
             setPassword('');
             setEmail('');
-            console.log('Creation successful, token:', access_token); // REMOVE LATER
             router.push('/login') // RE ROUTE TO NEXT PAGE --> Login --> Full portfolio
          })
          .catch((err) => {
