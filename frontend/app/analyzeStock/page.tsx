@@ -49,13 +49,9 @@ const AnalyzeStock = () => {
         if (!res.ok) {
           if (res.status === 404)
           {
-            alert('Stock not found: ' + res.statusText);
+            throw new Error('Stock not found: ' + res.statusText);
           }
-          else
-          {
-            alert('Failed to fetch stock: ' + res.statusText);
-          }
-          router.push('/fullPortfolio')
+          throw new Error('Failed to fetch stock: ' + res.statusText);
         }
         return res.json();
       })
@@ -66,6 +62,7 @@ const AnalyzeStock = () => {
       .catch((err) => {
         console.log(err.message);
         alert('Failed to fetch stock. Please try again.');
+        router.push('/fullPortfolio')
       });
 
     };
