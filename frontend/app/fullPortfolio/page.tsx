@@ -96,6 +96,7 @@ const PortfolioPage = () => {
       return res.json();
     })
     .then((data) => {
+      sessionStorage.removeItem('JWT');
       router.push('/')
     })
     .catch((err) => {
