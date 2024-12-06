@@ -573,7 +573,7 @@ Response:
 []
 ```
 
-### 10. Test Logout
+### 10. Logout
 ```bash
 curl -X POST http://localhost:5001/api/users/logout \
   -H "Content-Type: application/json" \
@@ -583,6 +583,17 @@ Response:
 
 ```json
 ['Logged out successfully']
+```
+
+### 11. Delete Stocks by Symbol
+```bash
+curl -X DELETE http://localhost:5001/api/stocks/symbol/<symbol> \
+-H "Authorization: Bearer <token>"
+```
+Response:
+
+```json
+['Stock deleted successfully']
 ```
 
 ## Testing Results Summary
