@@ -3,12 +3,6 @@
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useRouter } from 'next/navigation';
-import { Roboto } from "next/font/google";
-
-const roboto = Roboto({
-  weight: ["400", "500", "700"],
-  subsets: ["latin"],
-});
 
 interface StockData {
   id: string,
@@ -39,38 +33,46 @@ const AnalyzeStock = () => {
 
   useEffect(() => {
     const fetchSingleStockData = async () => {
-      try {
-        const response = await fetch(`http://localhost:5001/api/stocks/symbol/${symbol}`, {
-          method: 'GET',
-          headers: {
+      fetch(`http://localhost:5001/api/stocks/symbol/${symbol}`, {
+        method: 'GET',
+        headers: {
             'Content-type': 'application/json; charset=UTF-8',
-            'Authorization': `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImlhdCI6MTczMzQ2NDE3NCwiZXhwIjoxNzMzNTUwNTc0fQ.LWbuiIXfL1PnWBALK5nGyYlKQIGmCP4KWfmyhDoc39s`,
-          },
-        });
-        
-        if (!response.ok) {
-          throw new Error(response.status === 404 ? 'Stock Not Found' : 'Fetch failed');
+            'Authorization': `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImlhdCI6MTczMzQ2NjcxMiwiZXhwIjoxNzMzNTUzMTEyfQ.yegQLg98Ntrj5zSClbuBjMFEyRNE675dqC59iMAL0ZQ`,
+        },
+      })
+      .then((res) => {
+        if (!res.ok) {
+          if (res.status === 404)
+          {
+              alert('Stock not found: ' + res.statusText);
+          }
+          else
+          {
+            alert('Failed to fetch stock: ' + res.statusText);
+          }
+          router.push('/fullPortfolio')
         }
-        
-        const data: StockData = await response.json();
+        return res.json();
+      })
+      .then((data) => {
         setStockData(data);
         setTotalPrice(data.quantity * data.currentPrice); 
-      } catch (error) {
-        console.error(error);
-      }
+      })
+      .catch((err) => {
+        console.log(err.message);
+        alert('Failed to fetch stock. Please try again.');
+      });
+
     };
 
     fetchSingleStockData();
-  }, [symbol]);
-
-  const getProfitLossColor = (value: number) => 
-    value >= 0 ? 'text-green-500' : 'text-red-500';
+  }, []);
 
   return (
-    <div className={`${roboto.className} min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-700 text-white px-6 py-8`}>
+    <div className={`min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-700 text-white px-6 py-8`}>
       <h1 className="text-3xl font-bold text-center mb-8">Stock Analysis</h1>
       
-      {stockData ? (
+      {stockData &&
         <div className="space-y-6">
           {/* Summary Section */}
           <div className="bg-gray-800 shadow-lg rounded-lg p-6">
@@ -78,28 +80,28 @@ const AnalyzeStock = () => {
             <div className="grid grid-cols-2 gap-4">
               <DetailItem 
                 label="Symbol" 
-                value={stockData.symbol} 
+                value={stockData.symbol ? stockData.symbol : "N/A"} 
               />
               <DetailItem 
                 label="Company" 
-                value={stockData.name || "N/A"} 
+                value={stockData.name ? stockData.name : "N/A"} 
               />
               <DetailItem 
                 label="Quantity" 
-                value={stockData.quantity.toString()} 
+                value={stockData.quantity ? stockData.quantity.toString() : "N/A"} 
               />
               <DetailItem 
                 label="Current Price" 
-                value={`$${stockData.currentPrice.toFixed(2)}`} 
+                value={stockData.currentPrice ? `$${stockData.currentPrice.toFixed(2)}` : "N/A"} 
               />
               <DetailItem 
                 label="Total Value" 
-                value={`$${totalPrice.toString()}`} 
+                value={totalPrice ? `$${totalPrice.toString()}` : "N/A"} 
               />
 
               <DetailItem 
                 label="Industry" 
-                value={`${stockData.industry.toString()}`} 
+                value={stockData.industry ? `${stockData.industry.toString()}` : "N/A"} 
               />
             </div>
           </div>
@@ -122,11 +124,12 @@ const AnalyzeStock = () => {
             </button>
           </div>
         </div>
-      ) : (
-        <div className="flex justify-center items-center h-64">
-          <p className="text-xl animate-pulse">Loading stock details...</p>
-        </div>
-      )}
+      //  : (
+      //   <div className="flex justify-center items-center h-64">
+      //     <p className="text-xl animate-pulse">Loading stock details...</p>
+      //   </div>
+      // )}
+      }
     </div>
   );
 };
