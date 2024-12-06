@@ -253,3 +253,22 @@ async function analyzePortfolioWithClaude(stocks) {
     return 'Unable to generate portfolio analysis at this time.';
   }
 }
+
+// Delete a stock by ID
+exports.deleteStock = async (req, res) => {
+  try {
+    const stockId = req.params.id;
+    const userId = req.user.id; // Assuming authentication middleware sets req.user
+
+    const stock = await Stock.findOne({ where: { id: stockId, userId } });
+
+    if (!stock) {
+      return res.status(404).json({ message: 'Stock not found in your portfolio' });
+    }
+
+    await stock.destroy();
+    res.json({ message: 'Stock deleted successfully' });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
