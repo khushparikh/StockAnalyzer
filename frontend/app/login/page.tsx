@@ -1,9 +1,7 @@
 "use client";
 
-import { userAgentFromString } from "next/server";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useRouter } from 'next/navigation';
-import Link from "next/link";
 
 interface PostData {
     email: string;
@@ -17,7 +15,6 @@ const Home = () => {
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [accessToken, setAccessToken] = useState('')
     
     
     const HandleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -45,10 +42,8 @@ const Home = () => {
         })
          .then((data) => {
             const access_token = data.token;
-            setAccessToken(access_token);
             setPassword('');
             setEmail('');
-            console.log('Login successful, token:', access_token); // REMOVE LATER
             router.push('/fullPortfolio') // RE ROUTE TO NEXT PAGE --> Full portfolio
          })
          .catch((err) => {
