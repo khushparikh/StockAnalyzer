@@ -44,7 +44,7 @@ const AnalyzeStock = () => {
         if (!res.ok) {
           if (res.status === 404)
           {
-              alert('Stock not found: ' + res.statusText);
+            alert('Stock not found: ' + res.statusText);
           }
           else
           {
@@ -57,7 +57,6 @@ const AnalyzeStock = () => {
       .then((data) => {
         setStockData(data);
         setTotalPrice(data.quantity * data.currentPrice); 
-        console.log(data.aiAnalysis)
       })
       .catch((err) => {
         console.log(err.message);
@@ -69,6 +68,8 @@ const AnalyzeStock = () => {
     fetchSingleStockData();
   }, []);
 
+
+  
   return (
     <div className={`min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-700 text-white px-6 py-8`}>
       <h1 className="text-4xl font-extrabold tracking-wide text-center mb-8">Stock Analysis</h1>
@@ -124,11 +125,7 @@ const AnalyzeStock = () => {
             </button>
           </div>
         </div>
-      //  : (
-      //   <div className="flex justify-center items-center h-64">
-      //     <p className="text-xl animate-pulse">Loading stock details...</p>
-      //   </div>
-      // )}
+    
       }
     </div>
   );
