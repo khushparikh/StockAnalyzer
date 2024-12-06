@@ -18,6 +18,10 @@ const User = sequelize.define('User', {
   password: {
     type: DataTypes.STRING,
     allowNull: false
+  },
+  jwt_token : {
+    type: DataTypes.STRING,
+    allowNull: false
   }
 }, {
   timestamps: true
