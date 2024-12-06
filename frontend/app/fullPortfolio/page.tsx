@@ -19,7 +19,7 @@ interface Stock {
 const PortfolioPage = () => {
   const router = useRouter();
 
-
+  const JWT = sessionStorage.getItem('JWT');
   const [stock, setStock] = useState<Stock[]>([]);
   const [searchSymbol, setSearchSymbol] = useState("");
   const [addSymbol, setAddSymbol] = useState('');
