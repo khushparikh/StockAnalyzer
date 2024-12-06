@@ -34,6 +34,8 @@ const AnalyzePortfolio = () => {
     const [error, setError] = useState<string>('');
     const router = useRouter();
 
+    const JWT = sessionStorage.getItem("JWT");
+
     const handleBackSelection = () => {
         router.push('/fullPortfolio');
       };
@@ -44,7 +46,7 @@ const AnalyzePortfolio = () => {
             const response = await fetch('http://127.0.0.1:5001/api/stocks/analyze/portfolio', {
             method: 'GET',
             headers: {
-                Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImlhdCI6MTczMzQ2NjUxOCwiZXhwIjoxNzMzNDY2Njk4fQ.rCW6rhwD7PrslpkPfBCeEswtyxrL4IVmI0Mgj2DJUwQ`,
+                Authorization: `Bearer ${JWT}`,
                 'Content-Type': 'application/json',
             },
             });
@@ -55,6 +57,7 @@ const AnalyzePortfolio = () => {
 
             const data = await response.json();
             setPortfolioData(data);
+            console.log(data)
         } catch (err: any) {
             setError(err.message);
             router.push('/analyzePortfolio');
