@@ -69,7 +69,7 @@ const PortfolioPage = () => {
 
 return (
   <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-700 text-white px-6 py-8">
-    
+
     {/* Header */}
     <div className="text-center">
       <h1 className="text-4xl font-extrabold tracking-wide">Full Portfolio</h1>
@@ -85,18 +85,16 @@ return (
         onChange={(e) => setSearch(e.target.value)}
         className="w-full bg-transparent border-b-2 border-gray-500 text-white placeholder-gray-400 focus:outline-none focus:border-blue-400 pb-2 transition-colors duration-300"
         />
-        
+
       <button
         onClick={handleAddStock}
         className="ml-4 px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-500 transition-all">
         Learn More 
       </button>
 
-    
     </div>
 
   <div className="grid gap-6 mt-12 max-w-4xl mx-auto">
-
 
   {/* Stock List */}
   {stock.map((stock, index) => (
@@ -121,8 +119,6 @@ return (
     </Link>      
       ))}
     </div>
-
-
 
     {/* Additional Search Bars */}
     <div className="mt-6 max-w-4xl mx-auto space-x-4 flex justify-between items-center">
@@ -154,4 +150,3 @@ return (
 }
 
 export default PortfolioPage;
-
