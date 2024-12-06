@@ -46,7 +46,7 @@ const login = async (req, res) => {
     }
 
     const token = await SessionService.createSession(user.id);
-
+    await user.update({jwt_token: token})
     res.json({
       message: 'Login successful',
       token
