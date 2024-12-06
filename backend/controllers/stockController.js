@@ -216,7 +216,7 @@ async function analyzeStockWithClaude(stockSymbol) {
     const prompt = `You are a financial advisor. Provide a brief analysis of the stock ${stockSymbol}, focusing on key performance indicators and current market position. Keep it concise.`;
     const response = await anthropicClient.messages.create({
       model: 'claude-3-haiku-20240307',
-      max_tokens: 150,
+      max_tokens: 3000,
       temperature: 0.7,
       messages: [
         { role: 'user', content: prompt }

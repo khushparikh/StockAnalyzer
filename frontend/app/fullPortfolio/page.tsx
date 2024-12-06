@@ -40,7 +40,7 @@ const PortfolioPage = () => {
         method: 'GET',
         headers: {
             'Content-type': 'application/json; charset=UTF-8',
-            'Authorization': `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImlhdCI6MTczMzQ2NjcxMiwiZXhwIjoxNzMzNTUzMTEyfQ.yegQLg98Ntrj5zSClbuBjMFEyRNE675dqC59iMAL0ZQ`,
+            'Authorization': `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImlhdCI6MTczMzQ2OTg3NSwiZXhwIjoxNzMzNTU2Mjc1fQ.lBAov3AiYwsKltkNtyDXJ4sj-bpHcOogZprevvk_lNk`,
         },
       })
       .then((res) => {

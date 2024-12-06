@@ -37,7 +37,7 @@ const AnalyzeStock = () => {
         method: 'GET',
         headers: {
             'Content-type': 'application/json; charset=UTF-8',
-            'Authorization': `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImlhdCI6MTczMzQ2NjcxMiwiZXhwIjoxNzMzNTUzMTEyfQ.yegQLg98Ntrj5zSClbuBjMFEyRNE675dqC59iMAL0ZQ`,
+            'Authorization': `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImlhdCI6MTczMzQ2OTg3NSwiZXhwIjoxNzMzNTU2Mjc1fQ.lBAov3AiYwsKltkNtyDXJ4sj-bpHcOogZprevvk_lNk`,
         },
       })
       .then((res) => {
@@ -57,6 +57,7 @@ const AnalyzeStock = () => {
       .then((data) => {
         setStockData(data);
         setTotalPrice(data.quantity * data.currentPrice); 
+        console.log(data.aiAnalysis)
       })
       .catch((err) => {
         console.log(err.message);
@@ -70,7 +71,7 @@ const AnalyzeStock = () => {
 
   return (
     <div className={`min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-700 text-white px-6 py-8`}>
-      <h1 className="text-3xl font-bold text-center mb-8">Stock Analysis</h1>
+      <h1 className="text-4xl font-extrabold tracking-wide text-center mb-8">Stock Analysis</h1>
       
       {stockData &&
         <div className="space-y-6">
@@ -107,13 +108,12 @@ const AnalyzeStock = () => {
           </div>
 
           {/* AI Analysis Section */}
-          <div className="bg-gray-800 shadow-lg rounded-lg p-6">
+          <div className="bg-gray-800 shadow-lg rounded-lg p-6 overflow-visible">
             <h2 className="text-2xl font-medium mb-4">AI Investment Insights</h2>
-            <p className="italic text-gray-300">
+            <p className="italic text-gray-300 whitespace-normal leading-relaxed overflow-visible">
               {stockData.aiAnalysis || "No AI analysis available at this time."}
             </p>
           </div>
-
           {/* Action Button */}
           <div className="flex justify-center mt-6">
             <button
