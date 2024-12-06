@@ -16,7 +16,7 @@ router.post('/add', authenticate, stockController.addStock);
 router.get('/:id', authenticate, stockController.getStockDetails);
 
 // Delete a stock by symbol
-router.delete('/symbol/:symbol', authenticate, stockController.deleteStock);
+router.delete('/symbol/:symbol', authenticate, stockController.deleteStockBySymbol);
 
 // Analyze portfolio
 router.get('/analyze/portfolio', authenticate, stockController.analyzePortfolio);
