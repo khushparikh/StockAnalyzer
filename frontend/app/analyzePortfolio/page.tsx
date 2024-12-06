@@ -22,13 +22,6 @@ interface Stock {
   profitLossPercent: number | boolean;
 }
 
-interface Summary {
-  totalValue: number;
-  totalInvestment: number | boolean;
-  totalProfitLoss: number | boolean;
-  totalProfitLossPercent: number | boolean;
-}
-
 const AnalyzePortfolio = () => {
     const [portfolioData, setPortfolioData] = useState<any>(null);
     const [error, setError] = useState<string>('');
