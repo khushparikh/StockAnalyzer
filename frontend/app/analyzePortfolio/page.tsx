@@ -49,7 +49,6 @@ const AnalyzePortfolio = () => {
 
             const data = await response.json();
             setPortfolioData(data);
-            console.log(data.aiAnalysis)
         } catch (err: any) {
             setError(err.message);
         }
@@ -135,41 +134,41 @@ const AnalyzePortfolio = () => {
 
     return (
         <div className="p-8 bg-gradient-to-br from-gray-900 via-gray-800 to-gray-700 text-white min-h-screen">
-        <h1 className="text-3xl font-bold text-center mb-6">Portfolio Analysis</h1>
+            <h1 className="text-3xl font-bold text-center mb-6">Portfolio Analysis</h1>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
-            <div className="bg-gray-800 rounded-lg p-6 shadow-md">
-            <h2 className="text-xl font-semibold text-center text-white mb-4">Portfolio Composition</h2>
-            <Pie data={portfolioComposition} />
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
+                <div className="bg-gray-800 rounded-lg p-6 shadow-md">
+                <h2 className="text-xl font-semibold text-center text-white mb-4">Portfolio Composition</h2>
+                <Pie data={portfolioComposition} />
+                </div>
+                <div className="bg-gray-800 rounded-lg p-6 shadow-md">
+                <h2 className="text-xl font-semibold text-center text-white mb-4">Stock Values Comparison</h2>
+                <Bar data={stockValuesComparison} />
+                </div>
+                <div className="bg-gray-800 rounded-lg p-6 shadow-md">
+                <h2 className="text-xl font-semibold text-center text-white mb-4">Industry Distribution</h2>
+                <Pie data={industryDistribution} />
+                </div>
             </div>
-            <div className="bg-gray-800 rounded-lg p-6 shadow-md">
-            <h2 className="text-xl font-semibold text-center text-white mb-4">Stock Values Comparison</h2>
-            <Bar data={stockValuesComparison} />
-            </div>
-            <div className="bg-gray-800 rounded-lg p-6 shadow-md">
-            <h2 className="text-xl font-semibold text-center text-white mb-4">Industry Distribution</h2>
-            <Pie data={industryDistribution} />
-            </div>
-        </div>
 
-        <div className="bg-gray-800 rounded-lg p-6 shadow-md mb-6">
-            <h2 className="text-2xl font-semibold text-white mb-4">Portfolio Summary</h2>
-            <p className="text-lg text-gray-500">
-            <strong>Total Value:</strong> ${portfolioData.summary.totalValue.toFixed(2)}
-            </p>
-        </div>
+            <div className="bg-gray-800 rounded-lg p-6 shadow-md mb-6">
+                <h2 className="text-2xl font-semibold text-white mb-4">Portfolio Summary</h2>
+                <p className="text-lg text-gray-500">
+                <strong>Total Value:</strong> ${portfolioData.summary.totalValue.toFixed(2)}
+                </p>
+            </div>
 
-        <div className="bg-gray-800 rounded-lg p-6 shadow-md">
-            <h2 className="text-2xl font-semibold text-white mb-4">AI Analysis</h2>
-            <p className="text-gray-500">
-            {portfolioData.aiAnalysis.split('\n').map((line: string, index: number) => (
-                <span key={index}>
-                {line}
-                <br />
-                </span>
-            ))}
-            </p>
-        </div>
+            <div className="bg-gray-800 rounded-lg p-6 shadow-md">
+                <h2 className="text-2xl font-semibold text-white mb-4">AI Analysis</h2>
+                <p className="text-gray-500">
+                {portfolioData.aiAnalysis.split('\n').map((line: string, index: number) => (
+                    <span key={index}>
+                    {line}
+                    <br />
+                    </span>
+                ))}
+                </p>
+            </div>
         </div>
     );
 };
