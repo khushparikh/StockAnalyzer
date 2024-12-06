@@ -15,8 +15,8 @@ router.post('/add', authenticate, stockController.addStock);
 // Get individual stock details
 router.get('/:id', authenticate, stockController.getStockDetails);
 
-// Delete a stock by ID
-router.delete('/:id', authenticate, stockController.deleteStock);
+// Delete a stock by symbol
+router.delete('/symbol/:symbol', authenticate, stockController.deleteStock);
 
 // Analyze portfolio
 router.get('/analyze/portfolio', authenticate, stockController.analyzePortfolio);
