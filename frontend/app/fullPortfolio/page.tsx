@@ -186,7 +186,6 @@ return (
 
   <div className="grid gap-6 mt-12 max-w-4xl mx-auto">
 
-
   {/* Stock List */}
   {stock.map((stock, index) => (
     <div className='flex' key={index}>
@@ -250,4 +249,3 @@ return (
 }
 
 export default PortfolioPage;
-
