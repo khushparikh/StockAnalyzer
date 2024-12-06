@@ -207,6 +207,7 @@ Response:
     "updatedAt": "2024-12-05T00:23:56.502Z"
   }
 ]
+
 ```
 
 #### Get Stock by Symbol with AI Analysis
