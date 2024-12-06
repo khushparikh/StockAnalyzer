@@ -6,11 +6,11 @@ const Home = () => {
   const router = useRouter();
 
 
-  const HandleLogin = (e: React.MouseEvent<HTMLButtonElement>) => {
+  const HandleLogin = () => {
     router.push('/login'); // reroute to the login page
   }
 
-  const HandleSignUp = (e: React.MouseEvent<HTMLButtonElement>) => {
+  const HandleSignUp = () => {
     router.push('/createUser'); // reroute to the signup page
   }
   
@@ -23,13 +23,13 @@ const Home = () => {
       <div className="flex space-x-4">
         <button 
         className="text-white px-6 py-3 font-semibold bg-blue-600 hover:bg-blue-500 rounded-md shadow-md focus:outline-none focus:ring-2 focus:ring-sky-400 transition duration-300"
-        onClick={(e) => HandleLogin(e)}
+        onClick={() => HandleLogin()}
         >LOGIN
         </button>
 
         <button 
         className="text-white px-6 py-3 font-semibold bg-blue-600 hover:bg-blue-500 rounded-md shadow-md focus:outline-none focus:ring-2 focus:ring-sky-400 transition duration-300"
-        onClick={(e) => HandleSignUp(e)}
+        onClick={() => HandleSignUp()}
         >SIGN UP
         </button>
       </div>
