@@ -17,82 +17,156 @@ interface Stock {
 }
 
 const PortfolioPage = () => {
-  const [stockData, setStockData] = useState<Stock[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  const [stock, setStock] = useState<Stock[]>([]);
-  const [search, setSearch] = useState("");
-  const [additionalSearch1, setAdditionalSearch1] = useState('');
-  const [additionalSearch2, setAdditionalSearch2] = useState('');
-
-
   const router = useRouter();
 
+  // const [stockData, setStockData] = useState<Stock[]>([]);
+  // const [loading, setLoading] = useState(true);
+  // const [error, setError] = useState<string | null>(null);
+  const [stock, setStock] = useState<Stock[]>([]);
+  const [searchSymbol, setSearchSymbol] = useState("");
+  const [addSymbol, setAddSymbol] = useState('');
+  const [addQuantiy, setAddQuantity] = useState('');
+
+  const fetchStockData = () => {
+    fetch('http://127.0.0.1:5001/api/stocks', {
+      method: 'GET',
+      headers: {
+          'Content-type': 'application/json; charset=UTF-8',
+          'Authorization': `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImlhdCI6MTczMzQ2MjE3MiwiZXhwIjoxNzMzNDYyMzUyfQ.jZ-QZ8pJRdIXxWpSv4W4-jKi_yG5N8vL8KwJopxcFhU`,
+      },
+    })
+    .then((res) => {
+      console.log(res)   
+      if (!res.ok) {
+        throw new Error('Failed to get all stocks: ' + res.statusText);
+      }
+      return res.json();
+    })
+    .then((data) => {
+      console.log(data);
+      setStock(data);
+    })
+    .catch((err) => {
+      console.log(err.message);
+      alert('Failed to get all stocks. Please try again.');
+    });
+  };
+
   const handleAddStock = (e: React.MouseEvent<HTMLButtonElement>) => {
-    router.push('/addStock');
+    e.preventDefault();
+
+    fetch(`http://127.0.0.1:5001/api/stocks/add`, {
+      method: 'POST',
+      body: JSON.stringify({
+        "symbol": addSymbol,
+        "quantity": addQuantiy,
+    }),
+      headers: {
+          'Content-type': 'application/json; charset=UTF-8',
+          'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImlhdCI6MTczMzQ2MjE3MiwiZXhwIjoxNzMzNDYyMzUyfQ.jZ-QZ8pJRdIXxWpSv4W4-jKi_yG5N8vL8KwJopxcFhU'
+      },
+    })
+    .then((res) => {   
+      if (!res.ok) {
+        throw new Error('Failed to add stock. Please try again: ' + res.statusText)
+      }
+      return res.json();
+    })
+    .then((data) => {
+      fetchStockData();
+      setAddSymbol("")
+      setAddQuantity("")
+    })
+    .catch((err) => {
+       console.log(err.message);
+       alert('Failed to add stock. Please try again.');
+    }); 
   }
 
+  const handleLogout = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+
+    fetch(`http://127.0.0.1:5001/api/users/logout`, {
+      method: 'POST',
+      headers: {
+          'Content-type': 'application/json; charset=UTF-8',
+          'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImlhdCI6MTczMzQ2MjE3MiwiZXhwIjoxNzMzNDYyMzUyfQ.jZ-QZ8pJRdIXxWpSv4W4-jKi_yG5N8vL8KwJopxcFhU'
+      },
+    })
+    .then((res) => {   
+      if (!res.ok) {
+        throw new Error('Failed to logout. Please try again: ' + res.statusText)
+      }
+      return res.json();
+    })
+    .then((data) => {
+      router.push('/')
+    })
+    .catch((err) => {
+       console.log(err.message);
+       alert('Failed to logout. Please try again.');
+    });
+  }
+
+  const handleRemoveStock = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault
+
+    // delete fetch
+
+
+
+
+  }
  
   useEffect(() => {
-
-    const fetchStockData = async () => {
-      fetch('http://127.0.0.1:5001/api/stocks', {
-        method: 'GET',
-        headers: {
-            'Content-type': 'application/json; charset=UTF-8',
-            'Authorization': `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImlhdCI6MTczMzI5MDY5MiwiZXhwIjoxNzMzMzc3MDkyfQ.pZpSSPRIUQdu8BH1bs1P8EvQBu0Zhi1HU3SMFYahjz4`,
-        },
-      })
-      .then((res) => {
-        console.log(res)   
-        if (!res.ok) {
-            if (res.status === 401)
-            {
-                throw new Error('Invalid credentials: ' + res.statusText);
-            }
-            throw new Error('Login failed: ' + res.statusText);
-        }
-        return res.json();
-      })
-      .then((data) => {
-        console.log(data);
-        setStock(data);
-      })
-      .catch((err) => {
-        console.log(err.message);
-        alert('Login failed. Please try again.');
-      });
-};
-  fetchStockData();
-
-}, []);
+    fetchStockData();
+  }, []);
 
 return (
   <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-700 text-white px-6 py-8">
+    <div className="flex justify-end">
+      <button 
+        className="px-6 py-3 bg-red-600 text-white font-semibold rounded-lg shadow-md hover:bg-red-500 transition-all"
+        onClick={(e) => handleLogout(e)}
+      >LOGOUT
+      </button>
+    </div>
     
+    
+
+
     {/* Header */}
     <div className="text-center">
-      <h1 className="text-4xl font-extrabold tracking-wide">Full Portfolio</h1>
-      <p className="text-lg text-gray-300 mt-2">Track and manage your investments effortlessly.</p>
+      <h1 className="text-4xl font-extrabold tracking-wide">Portfolio</h1>
+      <p className="text-lg text-white my-2 mb-8">Track and manage your investments effortlessly.</p>
+      <Link href='/analyzePortfolio' className='px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-500 transition-all'
+      >Analyze Portfolio
+      </Link>
     </div>
 
-    {/* Search and Add Button */}
+    {/* Search and Learn More Button */}
     <div className="flex justify-between items-center mt-10 max-w-4xl mx-auto">
       <input
         type="text"
         placeholder="Search SYMBOL"
-        value={search}
-        onChange={(e) => setSearch(e.target.value)}
+        value={searchSymbol}
+        onChange={(e) => setSearchSymbol(e.target.value)}
         className="w-full bg-transparent border-b-2 border-gray-500 text-white placeholder-gray-400 focus:outline-none focus:border-blue-400 pb-2 transition-colors duration-300"
         />
         
-      <button
-        onClick={handleAddStock}
+      {/* <button
+        onClick={(e) => handleAnalyzeStock(e)}
         className="ml-4 px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-500 transition-all">
         Learn More 
-      </button>
-
-    
+      </button> */}
+      <Link
+        className=" ml-4 px-2 py-3 bg-blue-600 text-white text-center font-semibold rounded-lg shadow-md hover:bg-blue-400 transition-all"
+        href={{
+          pathname: 'analyzeStock',
+          query: { symbol: searchSymbol }
+        }}
+      >Learn More
+      </Link>
     </div>
 
   <div className="grid gap-6 mt-12 max-w-4xl mx-auto">
@@ -100,55 +174,63 @@ return (
 
   {/* Stock List */}
   {stock.map((stock, index) => (
-    <Link 
-      key={index}
-      href={{
-        pathname: "/analyzeStock",
-        query: { symbol: stock.symbol }
-      }}
-      className="block"
-    >
-      <div className="flex justify-between items-center bg-gray-800 p-6 rounded-lg shadow-lg transition-all duration-300 hover:scale-105 hover:shadow-xl">
-        <div>
-          <h2 className="text-2xl font-bold text-white">{stock.symbol}</h2>
-          <p className="text-gray-400 text-sm mt-1">{stock.description}</p>
+    <div className='flex' key={index}>
+      <Link 
+        href={{
+          pathname: "/analyzeStock",
+          query: { symbol: stock.symbol }
+        }}
+        className="block flex-grow"
+      >
+        <div className="flex justify-between items-center bg-gray-800 p-6 rounded-lg shadow-lg transition-all duration-300 hover:scale-105 hover:shadow-xl">
+          <div>
+            <h2 className="text-2xl font-bold text-white">{stock.symbol}</h2>
+            <p className="text-gray-400 text-sm mt-1">{stock.description}</p>
+          </div>
+          <div className="text-right">
+            <p className="text-lg font-semibold text-green-400">${stock.averagePrice.toFixed(2)}</p>
+            <p className="text-sm text-gray-500 mt-1">Quantity: {stock.quantity}</p>
+          </div>
         </div>
-        <div className="text-right">
-          <p className="text-lg font-semibold text-green-400">${stock.averagePrice.toFixed(2)}</p>
-          <p className="text-sm text-gray-500 mt-1">Quantity: {stock.quantity}</p>
-        </div>
-      </div>
-    </Link>      
+      </Link>
+      <button
+        className="w-1/7 h-1/2 ml-6 mr-4 px-3 my-6 align-middle bg-red-600 rounded-lg shadow-md hover:bg-red-500 transition-all aspect-square duration-300 hover:scale-105 hover:shadow-l"
+        onClick={(e) => handleRemoveStock(e)}
+        > <img src="/trashcan.svg" alt="Check Icon" className="w-6 h-6 aspect-square" />
+      </button>
+    </div>
+          
+          
       ))}
     </div>
 
 
 
-    {/* Additional Search Bars */}
+    {/* Add Stock */}
     <div className="mt-6 max-w-4xl mx-auto space-x-4 flex justify-between items-center">
     <input
         type="text"
         placeholder="Search Symbol"
-        value={additionalSearch1}
-        onChange={(e) => setAdditionalSearch1(e.target.value)}
+        value={addSymbol}
+        onChange={(e) => setAddSymbol(e.target.value)}
         className="w-full bg-transparent border-b-2 border-gray-500 text-white placeholder-gray-400 focus:outline-none focus:border-blue-400 pb-2 transition-colors duration-300"
         />
       <input
         type="text"
         placeholder="Select Quantity"
-        value={additionalSearch2}
-        onChange={(e) => setAdditionalSearch2(e.target.value)}
+        value={addQuantiy}
+        onChange={(e) => setAddQuantity(e.target.value)}
         className="w-full bg-transparent border-b-2 border-gray-500 text-white placeholder-gray-400 focus:outline-none focus:border-blue-400 pb-2 transition-colors duration-300"
         />
       <button
-        className="px-6 py-3 bg-indigo-600 text-white font-semibold rounded-lg shadow-md hover:bg-indigo-500 transition-all"
-  >
-       Add Stock
+        className="px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-400 transition-all"
+        onClick={(e) => handleAddStock(e)}
+        >Add Stock
       </button>
     </div>
 
-    {/* Error Message */}
-    {error && <p className="text-red-400 text-center mt-6">{error}</p>}
+    {/* Error Message
+    {error && <p className="text-red-400 text-center mt-6">{error}</p>} */}
   </div>
 );
 }
