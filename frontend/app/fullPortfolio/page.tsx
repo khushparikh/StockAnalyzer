@@ -19,9 +19,7 @@ interface Stock {
 const PortfolioPage = () => {
   const router = useRouter();
 
-  // const [stockData, setStockData] = useState<Stock[]>([]);
-  // const [loading, setLoading] = useState(true);
-  // const [error, setError] = useState<string | null>(null);
+
   const [stock, setStock] = useState<Stock[]>([]);
   const [searchSymbol, setSearchSymbol] = useState("");
   const [addSymbol, setAddSymbol] = useState('');
@@ -36,14 +34,12 @@ const PortfolioPage = () => {
       },
     })
     .then((res) => {
-      console.log(res)   
       if (!res.ok) {
         throw new Error('Failed to get all stocks: ' + res.statusText);
       }
       return res.json();
     })
     .then((data) => {
-      console.log(data);
       setStock(data);
     })
     .catch((err) => {
@@ -154,11 +150,7 @@ return (
         className="w-full bg-transparent border-b-2 border-gray-500 text-white placeholder-gray-400 focus:outline-none focus:border-blue-400 pb-2 transition-colors duration-300"
         />
         
-      {/* <button
-        onClick={(e) => handleAnalyzeStock(e)}
-        className="ml-4 px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-500 transition-all">
-        Learn More 
-      </button> */}
+   
       <Link
         className=" ml-4 px-2 py-3 bg-blue-600 text-white text-center font-semibold rounded-lg shadow-md hover:bg-blue-400 transition-all"
         href={{
@@ -229,8 +221,7 @@ return (
       </button>
     </div>
 
-    {/* Error Message
-    {error && <p className="text-red-400 text-center mt-6">{error}</p>} */}
+    
   </div>
 );
 }
