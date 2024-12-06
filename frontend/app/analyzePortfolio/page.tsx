@@ -57,6 +57,7 @@ const AnalyzePortfolio = () => {
             setPortfolioData(data);
         } catch (err: any) {
             setError(err.message);
+            router.push('/analyzePortfolio');
         }
         };
 
@@ -166,13 +167,13 @@ const AnalyzePortfolio = () => {
 
             <div className="bg-gray-800 rounded-lg p-6 shadow-md">
                 <h2 className="text-2xl font-semibold text-white mb-4">AI Analysis</h2>
-                <p className="text-gray-500">
+                <p className="text-gray-500 whitespace-normal leading-relaxed overflow-visible">
                 {portfolioData.aiAnalysis.split('\n').map((line: string, index: number) => (
                     <span key={index}>
                     {line}
                     <br />
                     </span>
-                ))}
+                )) || "No AI analysis available at this time."}
                 </p>
             </div>
 
