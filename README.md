@@ -573,6 +573,18 @@ Response:
 []
 ```
 
+### 10. Test Logout
+```bash
+curl -X POST http://localhost:5001/api/users/logout \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer <token>"
+```
+Response:
+
+```json
+['Logged out successfully']
+```
+
 ## Testing Results Summary
 
 ### API Endpoint Tests
@@ -580,7 +592,7 @@ Response:
 ```bash
 # Get Stock by Symbol Test
 curl -X GET http://localhost:5001/api/stocks/symbol/AAPL \
-  -H "Authorization: Bearer your_jwt_token"
+  -H "Authorization: Bearer <token>"
 
 Expected Response:
 {
