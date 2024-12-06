@@ -23,9 +23,10 @@ const AnalyzeStock = () => {
   const symbol = searchParams.get("symbol");
   const [stockData, setStockData] = useState<StockData | null>(null);
   const router = useRouter();
+  const JWT = sessionStorage.getItem("JWT");
 
  const [totalPrice, setTotalPrice] = useState(0);
-
+ 
 
   const handleBackSelection = () => {
     router.push('/fullPortfolio');
@@ -37,7 +38,7 @@ const AnalyzeStock = () => {
         method: 'GET',
         headers: {
             'Content-type': 'application/json; charset=UTF-8',
-            'Authorization': `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImlhdCI6MTczMzQ2OTg3NSwiZXhwIjoxNzMzNTU2Mjc1fQ.lBAov3AiYwsKltkNtyDXJ4sj-bpHcOogZprevvk_lNk`,
+            'Authorization': `Bearer ${JWT}`,
         },
       })
       .then((res) => {
