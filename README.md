@@ -78,6 +78,7 @@ DB_HOST=localhost
 ```
 
 5. Start the backend development server:
+
 ```bash
 npm run dev
 ```
@@ -85,20 +86,22 @@ npm run dev
 6. Open a new terminal, separate from the one running the backend development server
 
 7. Navigate to the frontend directory
+
 ```bash
 cd frontend
 ```
 
 8. Install dependencies:
+
 ```bash
 npm install
 ```
 
 9. Start the backend development server:
+
 ```bash
 npm run dev
 ```
-
 
 ## API Documentation
 
@@ -150,10 +153,11 @@ Example Response:
 All stock endpoints require authentication. Replace `your_jwt_token` with your actual JWT token.
 
 #### Add a Stock
+
 ```bash
 curl -X POST http://localhost:5001/api/stocks/add \
   -H "Content-Type: application/json" \
-  -H "Authorization: Bearer your_jwt_token" \
+  -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImlhdCI6MTczMzM5MDc4MSwiZXhwIjoxNzMzNDc3MTgxfQ.beoE3EfM3TSj9x55R6GWAT7rVGk09ftEhrn3jgdPjDg" \
   -d '{
     "symbol": "AAPL",
     "quantity": 10
@@ -161,6 +165,7 @@ curl -X POST http://localhost:5001/api/stocks/add \
 ```
 
 Response:
+
 ```json
 {
   "id": 1,
@@ -178,12 +183,14 @@ Response:
 ```
 
 #### Get All Stocks
+
 ```bash
 curl -X GET http://localhost:5001/api/stocks \
   -H "Authorization: Bearer your_jwt_token"
 ```
 
 Response:
+
 ```json
 [
   {
@@ -203,12 +210,14 @@ Response:
 ```
 
 #### Get Stock by Symbol with AI Analysis
+
 ```bash
 curl -X GET http://localhost:5001/api/stocks/symbol/AAPL \
   -H "Authorization: Bearer your_jwt_token"
 ```
 
 Response:
+
 ```json
 {
   "id": 1,
@@ -282,12 +291,14 @@ Example Response:
 ```
 
 #### Clear Portfolio
+
 ```bash
 curl -X DELETE http://localhost:5001/api/stocks/clear \
   -H "Authorization: Bearer your_jwt_token"
 ```
 
 Response:
+
 ```json
 {
   "message": "All stocks have been cleared from the database"
@@ -345,7 +356,7 @@ Response:
 # Replace <token> with the JWT token received from login
 curl -X POST http://localhost:5001/api/stocks/add \
   -H "Content-Type: application/json" \
-  -H "Authorization: Bearer <token>" \
+  -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImlhdCI6MTczMzQ2Mjk4OCwiZXhwIjoxNzMzNTQ5Mzg4fQ.czjhTgjF-2bK2H9J8TO3nbTTcj-q7YTyqYwLmfibj1o" \
   -d '{
     "symbol": "AAPL",
     "quantity": 10
