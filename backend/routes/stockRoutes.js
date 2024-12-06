@@ -15,6 +15,12 @@ router.post('/add', authenticate, stockController.addStock);
 // Get individual stock details
 router.get('/:id', authenticate, stockController.getStockDetails);
 
+const stockController = require('../controllers/stockController');
+const { authenticate } = require('../middleware/auth');
+
+// Delete a stock by ID
+router.delete('/:id', authenticate, stockController.deleteStock);
+
 // Analyze portfolio
 router.get('/analyze/portfolio', authenticate, stockController.analyzePortfolio);
 
