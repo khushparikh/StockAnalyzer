@@ -95,6 +95,26 @@ node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
 npm run dev
 ```
 
+8. Open a new terminal
+
+9. Navigate to the frontend directory:
+
+```bash
+cd backend
+```
+
+10. Install dependencies:
+
+```bash
+npm install
+```
+
+11. Start the development server:
+
+```bash
+npm run dev
+```
+
 ## Security Features
 
 ### Data Encryption
