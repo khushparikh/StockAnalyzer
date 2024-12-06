@@ -117,7 +117,12 @@ const AnalyzeStock = () => {
           <div className="bg-gray-800 shadow-lg rounded-lg p-6 overflow-visible">
             <h2 className="text-2xl font-medium mb-4">AI Investment Insights</h2>
             <p className="italic text-gray-300 whitespace-normal leading-relaxed overflow-visible">
-              {stockData.aiAnalysis || "No AI analysis available at this time."}
+              {stockData.aiAnalysis.split('\n').map((line: string, index: number) => (
+                    <span key={index}>
+                    {line}
+                    <br />
+                    </span>
+                )) || "No AI analysis available at this time."}
             </p>
           </div>
           {/* Action Button */}
