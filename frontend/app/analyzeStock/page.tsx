@@ -33,6 +33,10 @@ const AnalyzeStock = () => {
   };
 
   useEffect(() => {
+    if (!JWT) {
+      router.push('/');
+    }
+
     const fetchSingleStockData = async () => {
       fetch(`http://localhost:5001/api/stocks/symbol/${symbol}`, {
         method: 'GET',

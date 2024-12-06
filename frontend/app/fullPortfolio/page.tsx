@@ -138,6 +138,9 @@ const PortfolioPage = () => {
   }
  
   useEffect(() => {
+    if (!JWT) {
+      router.push('/');
+    }
     fetchStockData();
   }, []);
 
