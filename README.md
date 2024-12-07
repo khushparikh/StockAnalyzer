@@ -77,6 +77,9 @@ JWT_SECRET=your_jwt_secret
 ENCRYPTION_KEY=your_32_byte_encryption_key
 ```
 
+You need to generate the ``FINNHUB_API_KEY`` using: https://finnhub.io/register and the ``ANTHROPIC_API_KEY`` using: https://console.anthropic.com/login
+
+
 5. Generate a secure encryption key:
 
 ```bash
